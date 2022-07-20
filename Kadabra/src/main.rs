@@ -21,21 +21,26 @@ impl Unit {
             )
         }
     }
+
+    pub fn draw(&self) {
+        draw_rectangle(
+            self.rect.x,
+            self.rect.y,
+            self.rect.w,
+            self.rect.h,
+            UNIT_COLOR
+        );
+    }
 }
 
 
 #[macroquad::main("breakout")]
 async fn main() {
-    let unit_rect = Unit::new();
+    let unit = Unit::new();
 
     loop {
         clear_background(GROUND_COLOR);
-        draw_rectangle(
-            unit_rect.rect.x,
-            unit_rect.rect.y,
-            unit_rect.rect.w,
-            unit_rect.rect.h,
-            UNIT_COLOR);
+        unit.draw();
         next_frame().await
     }
 }
