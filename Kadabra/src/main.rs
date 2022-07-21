@@ -3,7 +3,7 @@ use macroquad::prelude::*;
 
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
 const UNIT_COLOR: Color = DARKGRAY;
-const UNIT_SIZE: Vec2 = const_vec2!([40., 60.]);
+const UNIT_SIZE: Vec2 = const_vec2!([40., 40.]);
 const UNIT_SPEED: f32 = 300.0;
 
 struct Unit {
@@ -23,6 +23,14 @@ impl Unit {
     }
 
     pub fn update(&mut self, dt: f32) {
+        let mut x_move = 0f32;
+        if is_key_down(KeyCode::Left) {
+            x_move -= 1f32;
+        }
+        if is_key_down(KeyCode::Right) {
+            x_move += 1f32;
+        }
+
         let mut y_move = 0f32;
         if is_key_down(KeyCode::Up) {
             y_move -= 1f32;
@@ -30,6 +38,22 @@ impl Unit {
         if is_key_down(KeyCode::Down) {
             y_move += 1f32;
         }
+
+        if self.rect.x < 1f32 {
+            x_move = 1f32;
+        }
+        if self.rect.x > screen_width() - self.rect.w {
+            x_move = -1f32;
+        }
+
+        if self.rect.y < 1f32 {
+            y_move = 1f32;
+        }
+        if self.rect.y > screen_height() - self.rect.h {
+            y_move = -1f32;
+        }
+
+        self.rect.x += x_move * dt * UNIT_SPEED;
         self.rect.y += y_move * dt * UNIT_SPEED;
     }
 
