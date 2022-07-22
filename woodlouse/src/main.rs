@@ -43,10 +43,16 @@ impl Unit {
         }
 
         if self.collision.y < 1f32 {
-            y_move = 1f32;
+            self.collision.y += 1f32;
         }
         if self.collision.y > screen_height() - UNIT_SIZE.1 {
-            y_move = -1f32;
+            self.collision.y -= 1f32;
+        }
+        if self.collision.x < 1f32 {
+            self.collision.x += 1f32;
+        }
+        if self.collision.x > screen_width() - UNIT_SIZE.1 {
+            self.collision.x -= 1f32;
         }
 
         self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
