@@ -72,11 +72,27 @@ impl Unit {
 #[macroquad::main("breakout")]
 async fn main() {
     let mut unit = Unit::new();
+    let texture: Texture2D = load_texture("materials/path726-5.png").await.unwrap();
 
     loop {
         unit.update(get_frame_time());
         clear_background(GROUND_COLOR);
         unit.draw();
+
+        draw_texture_ex(
+            texture,
+            // screen_width() / 2. - texture.width() / 2.,
+            // screen_height() / 2. - texture.height() / 2.,
+            0.,
+            1.,
+            GOLD,
+            DrawTextureParams {
+                dest_size: Some(Vec2::new(100.0, 100.0)),
+                rotation: -50.,
+                ..Default::default()
+            }
+        );
+
         next_frame().await
     }
 }
