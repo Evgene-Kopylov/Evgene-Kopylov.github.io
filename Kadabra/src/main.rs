@@ -5,9 +5,12 @@ const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
 const UNIT_COLOR: Color = DARKGRAY;
 const UNIT_SIZE: (f32, f32) = (50.0, 75.0);
 const UNIT_SPEED: f32 = 300.0;
+const UNIT_ROTATION_SPEED: f32 = 4.0;
+
 
 struct Unit {
     collision: Circle,
+    rotation: f32,
 }
 
 impl Unit {
@@ -17,18 +20,21 @@ impl Unit {
                 screen_width() * 0.5 - UNIT_SIZE.1 * 0.5,
                 screen_height() * 0.5 - UNIT_SIZE.1 * 0.5,
                 UNIT_SIZE.1 / 2.
-            )
-
+            ),
+            rotation: 0.0,
         }
     }
 
     pub fn update(&mut self, dt: f32) {
-        let mut x_move = 0f32;
+        // let mut x_move = 0f32;
+        let mut rotation = 0f32;
         if is_key_down(KeyCode::Left) {
-            x_move -= 1f32;
+            // x_move -= 1f32;
+            rotation -= 1f32
         }
         if is_key_down(KeyCode::Right) {
-            x_move += 1f32;
+            // x_move += 1f32;
+            rotation += 1f32
         }
 
         let mut y_move = 0f32;
@@ -39,12 +45,12 @@ impl Unit {
             y_move += 1f32;
         }
 
-        if self.collision.x < 1f32 {
-            x_move = 1f32;
-        }
-        if self.collision.x > screen_width() - UNIT_SIZE.0 {
-            x_move = -1f32;
-        }
+        // if self.collision.x < 1f32 {
+        //     x_move = 1f32;
+        // }
+        // if self.collision.x > screen_width() - UNIT_SIZE.0 {
+        //     x_move = -1f32;
+        // }
 
         if self.collision.y < 1f32 {
             y_move = 1f32;
@@ -53,8 +59,9 @@ impl Unit {
             y_move = -1f32;
         }
 
-        self.collision.x += x_move * dt * UNIT_SPEED;
-        self.collision.y += y_move * dt * UNIT_SPEED;
+        self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
+        self.collision.x += y_move * dt * UNIT_SPEED * self.rotation.cos();
+        self.collision.y += y_move * dt * UNIT_SPEED * self.rotation.sin();
     }
 
     pub fn draw_collision(&self) {
@@ -75,7 +82,7 @@ impl Unit {
             UNIT_COLOR,
             DrawTextureParams {
                 dest_size: Some(Vec2::new(UNIT_SIZE.0, UNIT_SIZE.1)),
-                rotation: 0.,
+                rotation: self.rotation,
                 ..Default::default()
             }
         );
