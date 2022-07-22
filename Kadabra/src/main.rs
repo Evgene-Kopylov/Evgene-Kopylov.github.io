@@ -21,19 +21,16 @@ impl Unit {
                 screen_height() * 0.5 - UNIT_SIZE.1 * 0.5,
                 UNIT_SIZE.1 / 2.
             ),
-            rotation: 0.0,
+            rotation: 1.57,
         }
     }
 
     pub fn update(&mut self, dt: f32) {
-        // let mut x_move = 0f32;
         let mut rotation = 0f32;
         if is_key_down(KeyCode::Left) {
-            // x_move -= 1f32;
             rotation -= 1f32
         }
         if is_key_down(KeyCode::Right) {
-            // x_move += 1f32;
             rotation += 1f32
         }
 
@@ -44,13 +41,6 @@ impl Unit {
         if is_key_down(KeyCode::Down) {
             y_move += 1f32;
         }
-
-        // if self.collision.x < 1f32 {
-        //     x_move = 1f32;
-        // }
-        // if self.collision.x > screen_width() - UNIT_SIZE.0 {
-        //     x_move = -1f32;
-        // }
 
         if self.collision.y < 1f32 {
             y_move = 1f32;
@@ -82,7 +72,7 @@ impl Unit {
             UNIT_COLOR,
             DrawTextureParams {
                 dest_size: Some(Vec2::new(UNIT_SIZE.0, UNIT_SIZE.1)),
-                rotation: self.rotation,
+                rotation: self.rotation - 1.57,
                 ..Default::default()
             }
         );
@@ -98,7 +88,7 @@ async fn main() {
     loop {
         unit.update(get_frame_time());
         clear_background(GROUND_COLOR);
-        unit.draw_collision();
+        // unit.draw_collision();
         unit.draw(texture);
 
         next_frame().await
