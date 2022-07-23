@@ -52,7 +52,7 @@ impl Unit {
             self.collision.x += 1f32;
         }
         if self.collision.x > screen_width() - UNIT_SIZE.1 {
-            self.collision.x -= 1f32;
+            self.collision.x -= 2f32;
         }
 
         self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
