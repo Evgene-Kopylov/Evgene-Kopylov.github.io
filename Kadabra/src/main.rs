@@ -94,7 +94,7 @@ async fn main() {
     loop {
         unit.update(get_frame_time());
         clear_background(GROUND_COLOR);
-        // unit.draw_collision();
+        unit.draw_collision();
         unit.draw(texture);
 
         next_frame().await
