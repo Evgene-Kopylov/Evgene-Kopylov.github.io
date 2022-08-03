@@ -96,6 +96,10 @@ async fn main() {
         clear_background(GROUND_COLOR);
         // unit.draw_collision();
         unit.draw(texture);
+        let mouse_position: Vec2 = mouse_position().into();
+        draw_text(
+            format!("X: {} Y: {}", mouse_position.x, mouse_position.y).as_str(),
+            10., 20., 30., BLACK);
 
         next_frame().await
     }
