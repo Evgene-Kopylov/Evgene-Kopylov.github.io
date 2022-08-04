@@ -6,7 +6,7 @@ const UNIT_COLOR: Color = GRAY;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
 const UNIT_SPEED: f32 = 300.0;
 const UNIT_ROTATION_SPEED: f32 = 4.0;
-
+const VISUAL_DEBUG: bool = true;
 
 struct Unit {
     collision: Circle,
@@ -94,7 +94,7 @@ async fn main() {
     loop {
         unit.update(get_frame_time());
         clear_background(GROUND_COLOR);
-        // unit.draw_collision();
+        if VISUAL_DEBUG { unit.draw_collision() }
         unit.draw(texture);
         let mouse_position: Vec2 = mouse_position().into();
         draw_text(
