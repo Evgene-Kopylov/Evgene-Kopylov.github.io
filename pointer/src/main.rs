@@ -34,7 +34,7 @@ impl Unit {
             rotation += 1f32
         }
 
-        let mut y_move = 0f32;
+        let mut y_move = -1f32;
         if is_key_down(KeyCode::Up) {
             y_move -= 1f32;
         }
@@ -57,11 +57,12 @@ impl Unit {
 
 
         // поворот юнита в сторону курсора
-        let dx = self.collision.x - mouse_position.x;
-        let dy = self.collision.y - mouse_position.y;
+        let dx = self.collision.x + UNIT_SIZE.1 / 2. - mouse_position.x;
+        let dy = self.collision.y + UNIT_SIZE.1 / 2. - mouse_position.y;
         let mut a;
-        if dx > 0f32 { a = (dy / dx).atan(); }
+        if dx >= 0f32 { a = (dy / dx).atan(); }
         else { a = (dy / dx).atan() - 3.14; }
+
 
         self.rotation = a;
         // self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
