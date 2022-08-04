@@ -25,7 +25,7 @@ impl Unit {
         }
     }
 
-    pub fn update(&mut self, dt: f32) {
+    pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
         let mut rotation = 0f32;
         if is_key_down(KeyCode::Left) {
             rotation -= 1f32
@@ -55,7 +55,16 @@ impl Unit {
             self.collision.x -= 2f32;
         }
 
-        self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
+
+        // поворот юнита в сторону курсора
+        let dx = self.collision.x - mouse_position.x;
+        let dy = self.collision.y - mouse_position.y;
+        let mut a;
+        if dx > 0f32 { a = (dy / dx).atan(); }
+        else { a = (dy / dx).atan() - 3.14; }
+
+        self.rotation = a;
+        // self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
         self.collision.x += y_move * dt * UNIT_SPEED * self.rotation.cos();
         self.collision.y += y_move * dt * UNIT_SPEED * self.rotation.sin();
     }
@@ -92,11 +101,11 @@ async fn main() {
     let mut unit = Unit::new();
 
     loop {
-        unit.update(get_frame_time());
+        let mouse_position: Vec2 = mouse_position().into();
+        unit.update(get_frame_time(), mouse_position);
         clear_background(GROUND_COLOR);
         if VISUAL_DEBUG { unit.draw_collision() }
         unit.draw(texture);
-        let mouse_position: Vec2 = mouse_position().into();
         draw_text(
             format!("X: {} Y: {}", mouse_position.x, mouse_position.y).as_str(),
             10., 20., 30., BLACK);
