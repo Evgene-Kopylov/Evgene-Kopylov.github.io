@@ -2,8 +2,8 @@ use macroquad::prelude::*;
 
 
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
-const UNIT_COLOR: Color = DARKGRAY;
-const UNIT_SIZE: (f32, f32) = (50.0, 75.0);
+const UNIT_COLOR: Color = GRAY;
+const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
 const UNIT_SPEED: f32 = 300.0;
 const UNIT_ROTATION_SPEED: f32 = 4.0;
 
@@ -88,7 +88,7 @@ impl Unit {
 
 #[macroquad::main("breakout")]
 async fn main() {
-    let texture: Texture2D = load_texture("materials/path726-5.png").await.unwrap();
+    let texture: Texture2D = load_texture("materials/path3333.png").await.unwrap();
     let mut unit = Unit::new();
 
     loop {
