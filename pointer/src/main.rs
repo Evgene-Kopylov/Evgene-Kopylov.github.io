@@ -6,7 +6,7 @@ const UNIT_COLOR: Color = GRAY;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
 const UNIT_SPEED: f32 = 300.0;
 const UNIT_ROTATION_SPEED: f32 = 4.0;
-const VISUAL_DEBUG: bool = true;
+const VISUAL_DEBUG: bool = false;
 
 struct Unit {
     collision: Circle,
