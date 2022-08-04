@@ -60,9 +60,7 @@ impl Unit {
         let dx = self.collision.x + UNIT_SIZE.1 / 2. - mouse_position.x;
         let dy = self.collision.y + UNIT_SIZE.1 / 2. - mouse_position.y;
         let mut a;
-        if dx >= 0f32 { a = (dy / dx).atan(); }
-        else { a = (dy / dx).atan() - 3.14; }
-
+        if dx >= 0f32 { a = (dy / dx).atan(); } else { a = (dy / dx).atan() - 3.14; }
 
         self.rotation = a;
         // self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
