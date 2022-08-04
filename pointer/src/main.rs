@@ -57,10 +57,6 @@ impl Unit {
             self.collision.x -= 2f32;
         }
 
-
-
-
-
         // поворот юнита в сторону курсора
         let dx = self.collision.x + UNIT_SIZE.1 / 2. - mouse_position.x;
         let dy = self.collision.y + UNIT_SIZE.1 / 2. - mouse_position.y;
@@ -71,7 +67,6 @@ impl Unit {
         if dx.powf(2f32) + dy.powf(2f32) < (UNIT_SIZE.1 / 2.).powf(2f32) {
             y_move = 0f32;
         }
-
 
         self.rotation = a;
         // self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
