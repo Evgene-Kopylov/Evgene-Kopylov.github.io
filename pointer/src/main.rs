@@ -168,7 +168,7 @@ async fn main() {
         unit.update(dt, mouse_position);
         clear_background(GROUND_COLOR);
         draw_text(
-            "controllers: RMB, Shift",
+            "use RMB, Shift",
             10., 20., 30., BLACK
         );
 
