@@ -11,7 +11,7 @@ const VISUAL_DEBUG: bool = true;
 struct Unit {
     collision: Circle,
     rotation: f32,
-    target: Vec2,
+    order: Vec<Vec2>,
 }
 
 impl Unit {
@@ -23,28 +23,16 @@ impl Unit {
                 UNIT_SIZE.1 / 2.
             ),
             rotation: 1.57,
-            target: Vec2::new(
-                screen_width() * 0.5,
-                screen_height() * 0.5,
-            )
+            order: Vec::new(),
         }
     }
 
     pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
-        // let mut rotation = 0f32;
-        // if is_key_down(KeyCode::Left) {
-        //     rotation -= 1f32
-        // }
-        // if is_key_down(KeyCode::Right) {
-        //     rotation += 1f32
-        // }
-
-
         // указание цели мышкой
-        if is_mouse_button_down(MouseButton::Right) || is_mouse_button_down(MouseButton::Left) {
-            self.target = mouse_position;
+        if is_mouse_button_released(MouseButton::Right) || is_mouse_button_released(MouseButton::Left) {
+            println!("{:?} {:?}", self.order, mouse_position);
+            self.order.push(mouse_position);
         }
-
 
         let mut y_move = -1f32;
         if is_key_down(KeyCode::Up) {
@@ -53,7 +41,6 @@ impl Unit {
         if is_key_down(KeyCode::Down) {
             y_move += 1f32;
         }
-
 
         // отталкиваться от краев карты
         if self.collision.y < 1f32 {
@@ -70,24 +57,26 @@ impl Unit {
         }
 
         // поворот юнита в сторону курсора
-        let mut dx = self.collision.x - self.target.x;
-        if dx == 0f32 { dx += 1f32; };
+        if self.order.len() > 0 {
+            let mut dx = self.collision.x - self.order[0].x;
+            if dx == 0f32 { dx += 1f32; };
 
-        let mut dy = self.collision.y - self.target.y;
-        if dy == 0f32 { dy += 1f32; };
+            let mut dy = self.collision.y - self.order[0].y;
+            if dy == 0f32 { dy += 1f32; };
 
-        let a;
-        if dx >= 0f32 { a = (dy / dx).atan(); } else { a = (dy / dx).atan() - 3.14; }
+            let a;
+            if dx >= 0f32 { a = (dy / dx).atan(); } else { a = (dy / dx).atan() - 3.14; }
 
-        // останавливаться перед целью
-        if dx.powf(2f32) + dy.powf(2f32) < (UNIT_SIZE.1 / 2.).powf(2f32) {
-            y_move = 0f32;
+            // останавливаться перед целью
+            if dx.powf(2f32) + dy.powf(2f32) < (UNIT_SIZE.1 / 2.).powf(2f32) {
+                y_move = 0f32;
+                self.order.remove(0);
+            }
+            self.rotation = a;
+            // self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
+            self.collision.x += y_move * dt * UNIT_SPEED * self.rotation.cos();
+            self.collision.y += y_move * dt * UNIT_SPEED * self.rotation.sin();
         }
-
-        self.rotation = a;
-        // self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
-        self.collision.x += y_move * dt * UNIT_SPEED * self.rotation.cos();
-        self.collision.y += y_move * dt * UNIT_SPEED * self.rotation.sin();
     }
 
     pub fn draw_collision(&self) {
@@ -96,19 +85,31 @@ impl Unit {
             self.collision.y,
             self.collision.r,
             1.,
-            RED
+            BLUE
         )
     }
 
     pub fn draw_target_line(&self) {
-        draw_line(
-            self.collision.x,
-            self.collision.y,
-            self.target.x,
-            self.target.y,
-            1f32,
-            RED
-        )
+        for i in 0..self.order.len() {
+            let x1;
+            let y1;
+            if i == 0 {
+                x1 = self.collision.x;
+                y1 = self.collision.y;
+            } else {
+                x1 = self.order[i-1].x;
+                y1 = self.order[i-1].y;
+            }
+            draw_line(
+                x1,
+                y1,
+                self.order[i].x,
+                self.order[i].y,
+                1f32,
+                BLUE,
+            )
+        }
+
     }
 
     pub fn draw(&self, texture: Texture2D) {
@@ -131,20 +132,19 @@ impl Unit {
 async fn main() {
     let texture: Texture2D = load_texture("materials/path3332.png").await.unwrap();
     let mut unit = Unit::new();
-    // println!("{}", unit.target);
     loop {
         let mouse_position: Vec2 = mouse_position().into();
         unit.update(get_frame_time(), mouse_position);
         clear_background(GROUND_COLOR);
+        draw_text(
+            "controllers: RMB",
+            10., 20., 30., BLACK
+        );
         if VISUAL_DEBUG {
             unit.draw_collision();
             unit.draw_target_line();
         }
         unit.draw(texture);
-        // draw_text(
-        //     format!("X: {} Y: {}", mouse_position.x, mouse_position.y).as_str(),
-        //     10., 20., 30., BLACK
-        // );
 
         next_frame().await
     }
