@@ -6,7 +6,7 @@ const UNIT_COLOR: Color = GRAY;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
 const UNIT_SPEED: f32 = 130.0;
 const UNIT_ROTATION_SPEED: f32 = 4.0;
-const VISUAL_DEBUG: bool = true;
+const VISUAL_DEBUG: bool = false;
 
 struct Unit {
     collision: Circle,
@@ -113,7 +113,7 @@ impl Unit {
         )
     }
 
-    pub fn draw_target_line(&self, dt: f32) {
+    pub fn draw_path(&self, dt: f32) {
         let mut eta: f32 = 0.0;
         for i in 0..self.order.len() {
             let x1;
@@ -145,7 +145,6 @@ impl Unit {
                 BLACK
             );
         }
-
     }
 
     pub fn draw(&self, texture: Texture2D) {
@@ -177,9 +176,9 @@ async fn main() {
             "controllers: RMB",
             10., 20., 30., BLACK
         );
-        if VISUAL_DEBUG {
+        if VISUAL_DEBUG || is_key_down(KeyCode::LeftShift) || is_key_down(KeyCode::RightShift) {
             unit.draw_collision();
-            unit.draw_target_line(dt);
+            unit.draw_path(dt)
         }
         unit.draw(texture);
 
