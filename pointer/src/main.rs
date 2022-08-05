@@ -83,10 +83,10 @@ impl Unit {
             if da > f32::to_radians(180.) {
                 da -= f32::to_radians(360.)
             }
-            println!("da = {}, self.rotation = {}, a = {}",
-                     f32::to_degrees(da),
-                     f32::to_degrees(self.rotation),
-                     f32::to_degrees(a));
+            // println!("da = {}, self.rotation = {}, a = {}",
+            //          f32::to_degrees(da),
+            //          f32::to_degrees(self.rotation),
+            //          f32::to_degrees(a));
             // сохранение направления движения
             if da.abs() > f32::to_radians(9.) {
                 if da > 0. {
@@ -99,6 +99,7 @@ impl Unit {
             // self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
             self.collision.x += y_move * dt * UNIT_SPEED * self.rotation.cos();
             self.collision.y += y_move * dt * UNIT_SPEED * self.rotation.sin();
+            println!("eta: {}", (dx.powf(2.) + dy.powf(2.)).sqrt() * dt / UNIT_SPEED * 100.0);
         }
     }
 
@@ -112,7 +113,8 @@ impl Unit {
         )
     }
 
-    pub fn draw_target_line(&self) {
+    pub fn draw_target_line(&self, dt: f32) {
+        let mut eta: f32 = 0.0;
         for i in 0..self.order.len() {
             let x1;
             let y1;
@@ -130,7 +132,18 @@ impl Unit {
                 self.order[i].y,
                 1f32,
                 BLUE,
-            )
+            );
+            let dx = x1 - self.order[i].x;
+            let dy = y1 - self.order[i].y;
+
+            eta += (dx.powf(2.) + dy.powf(2.)).sqrt() * dt / UNIT_SPEED * 200.0;
+            draw_text(
+                format!("ETA: {:.1}", eta).as_str(),
+                self.order[i].x,
+                self.order[i].y,
+                18.,
+                BLACK
+            );
         }
 
     }
@@ -157,7 +170,8 @@ async fn main() {
     let mut unit = Unit::new();
     loop {
         let mouse_position: Vec2 = mouse_position().into();
-        unit.update(get_frame_time(), mouse_position);
+        let dt = get_frame_time();
+        unit.update(dt, mouse_position);
         clear_background(GROUND_COLOR);
         draw_text(
             "controllers: RMB",
@@ -165,7 +179,7 @@ async fn main() {
         );
         if VISUAL_DEBUG {
             unit.draw_collision();
-            unit.draw_target_line();
+            unit.draw_target_line(dt);
         }
         unit.draw(texture);
 
