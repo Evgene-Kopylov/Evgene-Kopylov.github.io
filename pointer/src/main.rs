@@ -41,7 +41,7 @@ impl Unit {
 
 
         // указание цели мышкой
-        if is_mouse_button_down(MouseButton::Right) {
+        if is_mouse_button_down(MouseButton::Right) || is_mouse_button_down(MouseButton::Left) {
             self.target = mouse_position;
         }
 
