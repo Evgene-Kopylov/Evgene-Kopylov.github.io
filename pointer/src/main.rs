@@ -4,7 +4,7 @@ use macroquad::prelude::*;
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
 const UNIT_COLOR: Color = GRAY;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
-const UNIT_SPEED: f32 = 70.0;
+const UNIT_SPEED: f32 = 130.0;
 const UNIT_ROTATION_SPEED: f32 = 4.0;
 const VISUAL_DEBUG: bool = true;
 
@@ -75,7 +75,13 @@ impl Unit {
                 y_move = 0f32;
                 self.order.remove(0);
             }
-            let da = self.rotation - a;
+            let mut da = (self.rotation - a);
+            if da < f32::to_radians(-180.) {
+                da += f32::to_radians(360.)
+            }
+            if da > f32::to_radians(180.) {
+                da -= f32::to_radians(360.)
+            }
             println!("da = {}, self.rotation = {}, a = {}",
                      f32::to_degrees(da),
                      f32::to_degrees(self.rotation),
