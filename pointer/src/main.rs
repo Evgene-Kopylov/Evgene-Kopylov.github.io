@@ -83,10 +83,6 @@ impl Unit {
             if da > f32::to_radians(180.) {
                 da -= f32::to_radians(360.)
             }
-            // println!("da = {}, self.rotation = {}, a = {}",
-            //          f32::to_degrees(da),
-            //          f32::to_degrees(self.rotation),
-            //          f32::to_degrees(a));
             // сохранение направления движения
             if da.abs() > f32::to_radians(9.) {
                 if da > 0. {
@@ -95,8 +91,7 @@ impl Unit {
                     self.rotation += dt * UNIT_ROTATION_SPEED
                 }
             }
-            // self.rotation += da * 0.1 * dt * UNIT_ROTATION_SPEED;
-            // self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
+
             self.collision.x += y_move * dt * UNIT_SPEED * self.rotation.cos();
             self.collision.y += y_move * dt * UNIT_SPEED * self.rotation.sin();
             println!("eta: {}", (dx.powf(2.) + dy.powf(2.)).sqrt() * dt / UNIT_SPEED * 100.0);
@@ -176,6 +171,8 @@ async fn main() {
             "controllers: RMB, Shift",
             10., 20., 30., BLACK
         );
+
+        // отрисовка пути
         if VISUAL_DEBUG || is_key_down(KeyCode::LeftShift) || is_key_down(KeyCode::RightShift) {
             unit.draw_collision();
             unit.draw_path(dt)
