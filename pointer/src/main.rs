@@ -57,6 +57,7 @@ impl Unit {
 
         // поворот юнита в сторону курсора
         if self.order.len() > 0 {
+            self.rotation = self.rotation % f32::to_radians(360.);
             let mut dx = self.collision.x - self.order[0].x;
             if dx == 0f32 { dx += 1f32; };
 
@@ -76,7 +77,7 @@ impl Unit {
                 self.order.remove(0);
             }
             let mut da = self.rotation - a;
-            if da < f32::to_radians(-180.) {
+            if da <= f32::to_radians(-180.) {
                 da += f32::to_radians(360.)
             }
             if da > f32::to_radians(180.) {
@@ -142,7 +143,7 @@ impl Unit {
             UNIT_COLOR,
             DrawTextureParams {
                 dest_size: Some(Vec2::new(UNIT_SIZE.0, UNIT_SIZE.1)),
-                rotation: self.rotation - 1.57,
+                rotation: self.rotation - f32::to_radians(90.),
                 ..Default::default()
             }
         );
