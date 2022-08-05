@@ -4,9 +4,9 @@ use macroquad::prelude::*;
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
 const UNIT_COLOR: Color = GRAY;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
-const UNIT_SPEED: f32 = 300.0;
+const UNIT_SPEED: f32 = 100.0;
 const UNIT_ROTATION_SPEED: f32 = 4.0;
-const VISUAL_DEBUG: bool = false;
+const VISUAL_DEBUG: bool = true;
 
 struct Unit {
     collision: Circle,
@@ -17,8 +17,8 @@ impl Unit {
     pub fn new() -> Self {
         Self {
             collision: Circle::new(
-                screen_width() * 0.5 - UNIT_SIZE.1 * 0.5,
-                screen_height() * 0.5 - UNIT_SIZE.1 * 0.5,
+                screen_width() * 0.5,
+                screen_height() * 0.5,
                 UNIT_SIZE.1 / 2.
             ),
             rotation: 1.57,
@@ -54,12 +54,12 @@ impl Unit {
             self.collision.x += 1f32;
         }
         if self.collision.x > screen_width() - UNIT_SIZE.1 {
-            self.collision.x -= 2f32;
+            self.collision.x -= 1f32;
         }
 
         // поворот юнита в сторону курсора
-        let dx = self.collision.x + UNIT_SIZE.1 / 2. - mouse_position.x;
-        let dy = self.collision.y + UNIT_SIZE.1 / 2. - mouse_position.y;
+        let dx = self.collision.x - mouse_position.x;
+        let dy = self.collision.y - mouse_position.y;
         let mut a;
         if dx >= 0f32 { a = (dy / dx).atan(); } else { a = (dy / dx).atan() - 3.14; }
 
@@ -76,10 +76,21 @@ impl Unit {
 
     pub fn draw_collision(&self) {
         draw_circle_lines(
-            self.collision.x + UNIT_SIZE.0 * 0.5,
-            self.collision.y + UNIT_SIZE.1 * 0.5,
+            self.collision.x,
+            self.collision.y,
             self.collision.r,
             1.,
+            RED
+        )
+    }
+
+    pub fn draw_target_line(&self, mouse_position: Vec2) {
+        draw_line(
+            self.collision.x,
+            self.collision.y,
+            mouse_position.x,
+            mouse_position.y,
+            1f32,
             RED
         )
     }
@@ -87,8 +98,8 @@ impl Unit {
     pub fn draw(&self, texture: Texture2D) {
         draw_texture_ex(
             texture,
-            self.collision.x,
-            self.collision.y,
+            self.collision.x - UNIT_SIZE.0 * 0.5,
+            self.collision.y - UNIT_SIZE.1 * 0.5,
             UNIT_COLOR,
             DrawTextureParams {
                 dest_size: Some(Vec2::new(UNIT_SIZE.0, UNIT_SIZE.1)),
@@ -109,7 +120,10 @@ async fn main() {
         let mouse_position: Vec2 = mouse_position().into();
         unit.update(get_frame_time(), mouse_position);
         clear_background(GROUND_COLOR);
-        if VISUAL_DEBUG { unit.draw_collision() }
+        if VISUAL_DEBUG {
+            unit.draw_collision();
+            unit.draw_target_line(mouse_position);
+        }
         unit.draw(texture);
         draw_text(
             format!("X: {} Y: {}", mouse_position.x, mouse_position.y).as_str(),
