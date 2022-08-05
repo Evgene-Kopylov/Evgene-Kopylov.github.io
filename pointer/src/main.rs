@@ -64,7 +64,11 @@ impl Unit {
             if dy == 0f32 { dy += 1f32; };
 
             let a;
-            if dx >= 0f32 { a = (dy / dx).atan(); } else { a = (dy / dx).atan() - 3.14; }
+            if dx >= 0f32 {
+                a = (dy / dx).atan(); }
+            else {
+                a = (dy / dx).atan() - f32::to_radians(180.);
+            }
 
             // останавливаться перед целью
             if dx.powf(2f32) + dy.powf(2f32) < (UNIT_SIZE.1 / 2.).powf(2f32) {
@@ -72,7 +76,10 @@ impl Unit {
                 self.order.remove(0);
             }
             let da = self.rotation - a;
-            // println!("da = {}", da);
+            println!("da = {}, self.rotation = {}, a = {}",
+                     f32::to_degrees(da),
+                     f32::to_degrees(self.rotation),
+                     f32::to_degrees(a));
             if da > f32::to_radians(0.) {
                 self.rotation -= dt * UNIT_ROTATION_SPEED
             } else {
