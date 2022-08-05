@@ -2,7 +2,7 @@ use macroquad::prelude::*;
 
 
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
-const UNIT_COLOR: Color = WHITE;
+const UNIT_COLOR: Color = GRAY;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
 const UNIT_SPEED: f32 = 200.0;
 // const UNIT_ROTATION_SPEED: f32 = 4.0;
@@ -30,7 +30,6 @@ impl Unit {
     pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
         // указание цели мышкой
         if is_mouse_button_released(MouseButton::Right) {
-            println!("{:?} {:?}", self.order, mouse_position);
             self.order.push(mouse_position);
         }
 
@@ -130,7 +129,7 @@ impl Unit {
 
 #[macroquad::main("breakout")]
 async fn main() {
-    let texture: Texture2D = load_texture("materials/path3332.png").await.unwrap();
+    let texture: Texture2D = load_texture("materials/path3333.png").await.unwrap();
     let mut unit = Unit::new();
     loop {
         let mouse_position: Vec2 = mouse_position().into();
