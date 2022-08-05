@@ -80,7 +80,7 @@ impl Unit {
                      f32::to_degrees(da),
                      f32::to_degrees(self.rotation),
                      f32::to_degrees(a));
-            if da > f32::to_radians(0.) {
+            if da > 0. {
                 self.rotation -= dt * UNIT_ROTATION_SPEED
             } else {
                 self.rotation += dt * UNIT_ROTATION_SPEED
