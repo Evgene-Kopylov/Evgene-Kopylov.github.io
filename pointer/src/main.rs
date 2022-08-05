@@ -4,8 +4,8 @@ use macroquad::prelude::*;
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
 const UNIT_COLOR: Color = GRAY;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
-const UNIT_SPEED: f32 = 200.0;
-// const UNIT_ROTATION_SPEED: f32 = 4.0;
+const UNIT_SPEED: f32 = 70.0;
+const UNIT_ROTATION_SPEED: f32 = 4.0;
 const VISUAL_DEBUG: bool = true;
 
 struct Unit {
@@ -22,7 +22,7 @@ impl Unit {
                 screen_height() * 0.5,
                 UNIT_SIZE.1 / 2.
             ),
-            rotation: 1.57,
+            rotation: f32::to_radians(90.0),
             order: Vec::new(),
         }
     }
@@ -71,7 +71,14 @@ impl Unit {
                 y_move = 0f32;
                 self.order.remove(0);
             }
-            self.rotation = a;
+            let da = self.rotation - a;
+            // println!("da = {}", da);
+            if da > f32::to_radians(0.) {
+                self.rotation -= dt * UNIT_ROTATION_SPEED
+            } else {
+                self.rotation += dt * UNIT_ROTATION_SPEED
+            }
+            // self.rotation += da * 0.1 * dt * UNIT_ROTATION_SPEED;
             // self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
             self.collision.x += y_move * dt * UNIT_SPEED * self.rotation.cos();
             self.collision.y += y_move * dt * UNIT_SPEED * self.rotation.sin();
