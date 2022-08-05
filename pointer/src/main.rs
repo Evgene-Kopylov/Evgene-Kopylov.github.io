@@ -86,10 +86,13 @@ impl Unit {
                      f32::to_degrees(da),
                      f32::to_degrees(self.rotation),
                      f32::to_degrees(a));
-            if da > 0. {
-                self.rotation -= dt * UNIT_ROTATION_SPEED
-            } else {
-                self.rotation += dt * UNIT_ROTATION_SPEED
+            // сохранение направления движения
+            if da.abs() > f32::to_radians(9.) {
+                if da > 0. {
+                    self.rotation -= dt * UNIT_ROTATION_SPEED
+                } else {
+                    self.rotation += dt * UNIT_ROTATION_SPEED
+                }
             }
             // self.rotation += da * 0.1 * dt * UNIT_ROTATION_SPEED;
             // self.rotation += rotation * dt * UNIT_ROTATION_SPEED;
