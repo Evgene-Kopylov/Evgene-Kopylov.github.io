@@ -75,7 +75,7 @@ impl Unit {
                 y_move = 0f32;
                 self.order.remove(0);
             }
-            let mut da = (self.rotation - a);
+            let mut da = self.rotation - a;
             if da < f32::to_radians(-180.) {
                 da += f32::to_radians(360.)
             }
