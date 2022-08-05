@@ -29,7 +29,7 @@ impl Unit {
 
     pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
         // указание цели мышкой
-        if is_mouse_button_released(MouseButton::Right) || is_mouse_button_released(MouseButton::Left) {
+        if is_mouse_button_released(MouseButton::Right) {
             println!("{:?} {:?}", self.order, mouse_position);
             self.order.push(mouse_position);
         }
