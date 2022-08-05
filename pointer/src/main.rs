@@ -5,7 +5,7 @@ const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
 const UNIT_COLOR: Color = WHITE;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
 const UNIT_SPEED: f32 = 200.0;
-const UNIT_ROTATION_SPEED: f32 = 4.0;
+// const UNIT_ROTATION_SPEED: f32 = 4.0;
 const VISUAL_DEBUG: bool = true;
 
 struct Unit {
@@ -26,13 +26,13 @@ impl Unit {
     }
 
     pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
-        let mut rotation = 0f32;
-        if is_key_down(KeyCode::Left) {
-            rotation -= 1f32
-        }
-        if is_key_down(KeyCode::Right) {
-            rotation += 1f32
-        }
+        // let mut rotation = 0f32;
+        // if is_key_down(KeyCode::Left) {
+        //     rotation -= 1f32
+        // }
+        // if is_key_down(KeyCode::Right) {
+        //     rotation += 1f32
+        // }
 
         let mut y_move = -1f32;
         if is_key_down(KeyCode::Up) {
@@ -60,7 +60,7 @@ impl Unit {
         // поворот юнита в сторону курсора
         let dx = self.collision.x - mouse_position.x;
         let dy = self.collision.y - mouse_position.y;
-        let mut a;
+        let a;
         if dx >= 0f32 { a = (dy / dx).atan(); } else { a = (dy / dx).atan() - 3.14; }
 
         // останавливаться перед целью
