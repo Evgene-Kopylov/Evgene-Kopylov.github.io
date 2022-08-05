@@ -11,6 +11,7 @@ const VISUAL_DEBUG: bool = true;
 struct Unit {
     collision: Circle,
     rotation: f32,
+    target: Vec2,
 }
 
 impl Unit {
@@ -22,6 +23,10 @@ impl Unit {
                 UNIT_SIZE.1 / 2.
             ),
             rotation: 1.57,
+            target: Vec2::new(
+                screen_width() * 0.5,
+                screen_height() * 0.5,
+            )
         }
     }
 
@@ -33,6 +38,13 @@ impl Unit {
         // if is_key_down(KeyCode::Right) {
         //     rotation += 1f32
         // }
+
+
+        // указание цели мышкой
+        if is_mouse_button_down(MouseButton::Right) {
+            self.target = mouse_position;
+        }
+
 
         let mut y_move = -1f32;
         if is_key_down(KeyCode::Up) {
@@ -58,8 +70,12 @@ impl Unit {
         }
 
         // поворот юнита в сторону курсора
-        let dx = self.collision.x - mouse_position.x;
-        let dy = self.collision.y - mouse_position.y;
+        let mut dx = self.collision.x - self.target.x;
+        if dx == 0f32 { dx += 1f32; };
+
+        let mut dy = self.collision.y - self.target.y;
+        if dy == 0f32 { dy += 1f32; };
+
         let a;
         if dx >= 0f32 { a = (dy / dx).atan(); } else { a = (dy / dx).atan() - 3.14; }
 
@@ -84,12 +100,12 @@ impl Unit {
         )
     }
 
-    pub fn draw_target_line(&self, mouse_position: Vec2) {
+    pub fn draw_target_line(&self) {
         draw_line(
             self.collision.x,
             self.collision.y,
-            mouse_position.x,
-            mouse_position.y,
+            self.target.x,
+            self.target.y,
             1f32,
             RED
         )
@@ -115,14 +131,14 @@ impl Unit {
 async fn main() {
     let texture: Texture2D = load_texture("materials/path3332.png").await.unwrap();
     let mut unit = Unit::new();
-
+    // println!("{}", unit.target);
     loop {
         let mouse_position: Vec2 = mouse_position().into();
         unit.update(get_frame_time(), mouse_position);
         clear_background(GROUND_COLOR);
         if VISUAL_DEBUG {
             unit.draw_collision();
-            unit.draw_target_line(mouse_position);
+            unit.draw_target_line();
         }
         unit.draw(texture);
         // draw_text(
