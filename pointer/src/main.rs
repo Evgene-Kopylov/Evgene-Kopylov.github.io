@@ -2,9 +2,9 @@ use macroquad::prelude::*;
 
 
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
-const UNIT_COLOR: Color = GRAY;
+const UNIT_COLOR: Color = WHITE;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
-const UNIT_SPEED: f32 = 100.0;
+const UNIT_SPEED: f32 = 200.0;
 const UNIT_ROTATION_SPEED: f32 = 4.0;
 const VISUAL_DEBUG: bool = true;
 
@@ -113,7 +113,7 @@ impl Unit {
 
 #[macroquad::main("breakout")]
 async fn main() {
-    let texture: Texture2D = load_texture("materials/path3333.png").await.unwrap();
+    let texture: Texture2D = load_texture("materials/path3332.png").await.unwrap();
     let mut unit = Unit::new();
 
     loop {
@@ -125,9 +125,10 @@ async fn main() {
             unit.draw_target_line(mouse_position);
         }
         unit.draw(texture);
-        draw_text(
-            format!("X: {} Y: {}", mouse_position.x, mouse_position.y).as_str(),
-            10., 20., 30., BLACK);
+        // draw_text(
+        //     format!("X: {} Y: {}", mouse_position.x, mouse_position.y).as_str(),
+        //     10., 20., 30., BLACK
+        // );
 
         next_frame().await
     }
