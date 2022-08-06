@@ -1,6 +1,5 @@
 use macroquad::prelude::*;
 
-
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
 const UNIT_COLOR: Color = GRAY;
 const SELECTOR_COLOR: Color = YELLOW;
@@ -14,6 +13,7 @@ struct Unit {
     collision: Circle,
     rotation: f32,
     order: Vec<Vec2>,
+    selected: bool,
 }
 
 struct SelectorFrame {
@@ -34,9 +34,10 @@ impl SelectorFrame {
         }
     }
 
-    pub fn update(&mut self, mouse_position: Vec2) {
+    pub fn update(&mut self, mouse_position: Vec2, unit: &mut Unit) {
         if is_mouse_button_pressed(MouseButton::Left) {
             self.point1 = mouse_position;
+            unit.selected = false;
         }
 
         if is_mouse_button_down(MouseButton::Left) {
@@ -49,6 +50,15 @@ impl SelectorFrame {
                 self.point2.y - self.point1.y,
                 self.color,
             );
+        }
+
+        if is_mouse_button_released(MouseButton::Left) {
+            if unit.collision.x < self.point1.x.max(self.point2.x) &&
+                unit.collision.x > self.point1.x.min(self.point2.x) &&
+                unit.collision.y < self.point1.y.max(self.point2.y) &&
+                unit.collision.y > self.point1.y.min(self.point2.y) {
+                unit.selected = true;
+            }
         }
 
     }
@@ -65,12 +75,13 @@ impl Unit {
             ),
             rotation: f32::to_radians(90.0),
             order: Vec::new(),
+            selected: false,
         }
     }
 
     pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
         // указание цели мышкой
-        if is_mouse_button_released(MouseButton::Right) {
+        if self.selected && is_mouse_button_released(MouseButton::Right) {
             self.order.push(mouse_position);
         }
 
@@ -216,11 +227,14 @@ async fn main() {
 
         // отрисовка пути
         if VISUAL_DEBUG || is_key_down(KeyCode::LeftShift) || is_key_down(KeyCode::RightShift) {
+            unit.draw_path(dt)
+        }
+        if unit.selected {
             unit.draw_collision();
             unit.draw_path(dt)
         }
         unit.draw(texture);
-        selector_frame.update(mouse_position);
+        selector_frame.update(mouse_position, &mut unit);
         next_frame().await
     }
 }
