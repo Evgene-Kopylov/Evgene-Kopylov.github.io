@@ -3,15 +3,56 @@ use macroquad::prelude::*;
 
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
 const UNIT_COLOR: Color = GRAY;
+const SELECTOR_COLOR: Color = YELLOW;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
 const UNIT_SPEED: f32 = 130.0;
 const UNIT_ROTATION_SPEED: f32 = 4.0;
 const VISUAL_DEBUG: bool = false;
 
+
 struct Unit {
     collision: Circle,
     rotation: f32,
     order: Vec<Vec2>,
+}
+
+struct SelectorFrame {
+    point1: Vec2,
+    point2: Vec2,
+    color: Color,
+}
+
+impl SelectorFrame {
+    pub fn new() -> Self {
+        let mouse_position = mouse_position().into();
+        let mut color = SELECTOR_COLOR;
+        color.a = 0.14;
+        Self {
+            point1: mouse_position,
+            point2: mouse_position,
+            color,
+        }
+    }
+
+    pub fn update(&mut self, mouse_position: Vec2) {
+        if is_mouse_button_pressed(MouseButton::Left) {
+            self.point1 = mouse_position;
+        }
+
+        if is_mouse_button_down(MouseButton::Left) {
+            self.point2 = mouse_position;
+
+            draw_rectangle(
+                self.point1.x,
+                self.point1.y,
+                self.point2.x - self.point1.x,
+                self.point2.y - self.point1.y,
+                self.color,
+            );
+        }
+
+    }
+
 }
 
 impl Unit {
@@ -94,7 +135,6 @@ impl Unit {
 
             self.collision.x += y_move * dt * UNIT_SPEED * self.rotation.cos();
             self.collision.y += y_move * dt * UNIT_SPEED * self.rotation.sin();
-            println!("eta: {}", (dx.powf(2.) + dy.powf(2.)).sqrt() * dt / UNIT_SPEED * 100.0);
         }
     }
 
@@ -162,6 +202,8 @@ impl Unit {
 async fn main() {
     let texture: Texture2D = load_texture("materials/path3333.png").await.unwrap();
     let mut unit = Unit::new();
+    let mut selector_frame = SelectorFrame::new();
+
     loop {
         let mouse_position: Vec2 = mouse_position().into();
         let dt = get_frame_time();
@@ -178,7 +220,7 @@ async fn main() {
             unit.draw_path(dt)
         }
         unit.draw(texture);
-
+        selector_frame.update(mouse_position);
         next_frame().await
     }
 }
