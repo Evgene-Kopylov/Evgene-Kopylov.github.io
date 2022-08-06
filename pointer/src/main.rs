@@ -1,7 +1,7 @@
 use macroquad::prelude::*;
 
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
-const UNIT_COLOR: Color = GRAY;
+const UNIT_COLOR: Color = ORANGE;
 const SELECTOR_COLOR: Color = YELLOW;
 const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
 const UNIT_SPEED: f32 = 130.0;
@@ -198,8 +198,8 @@ impl Unit {
             eta += (dx.powf(2.) + dy.powf(2.)).sqrt() * dt / UNIT_SPEED * 200.0;
             draw_text(
                 format!("ETA: {:.1}", eta).as_str(),
-                self.order[i].x,
-                self.order[i].y,
+                self.order[i].x - 12.,
+                self.order[i].y - 5.,
                 18.,
                 BLACK
             );
@@ -234,7 +234,7 @@ async fn main() {
         unit.update(dt, mouse_position);
         clear_background(GROUND_COLOR);
         draw_text(
-            "use RMB, Shift",
+            "use LMB, RMB, Shift",
             10., 20., 30., BLACK
         );
 
