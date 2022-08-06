@@ -52,11 +52,24 @@ impl SelectorFrame {
             );
         }
 
+        // выделение области
         if is_mouse_button_released(MouseButton::Left) {
-            if unit.collision.x < self.point1.x.max(self.point2.x) &&
+            if
+                unit.collision.x < self.point1.x.max(self.point2.x) &&
                 unit.collision.x > self.point1.x.min(self.point2.x) &&
                 unit.collision.y < self.point1.y.max(self.point2.y) &&
-                unit.collision.y > self.point1.y.min(self.point2.y) {
+                unit.collision.y > self.point1.y.min(self.point2.y)
+            {
+                unit.selected = true;
+            }
+        }
+
+        // одиночный клик
+        if is_mouse_button_pressed(MouseButton::Left) {
+            if
+                (mouse_position.x - unit.collision.x).powf(2f32) +
+                (mouse_position.y - unit.collision.y).powf(2f32) < (UNIT_SIZE.1 / 2.).powf(2f32)
+            {
                 unit.selected = true;
             }
         }
