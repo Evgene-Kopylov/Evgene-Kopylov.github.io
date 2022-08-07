@@ -103,14 +103,6 @@ impl Unit {
             }
         }
 
-        let mut y_move = -1f32;
-        if is_key_down(KeyCode::Up) {
-            y_move -= 1f32;
-        }
-        if is_key_down(KeyCode::Down) {
-            y_move += 1f32;
-        }
-
         // отталкиваться от краев карты
         if self.collision.y < 1f32 {
             self.collision.y += 1f32;
@@ -143,7 +135,6 @@ impl Unit {
 
             // останавливаться перед целью
             if dx.powf(2f32) + dy.powf(2f32) < (UNIT_SIZE.1 / 2.).powf(2f32) {
-                y_move = 0f32;
                 self.order.remove(0);
             }
             let mut da = self.rotation - a;
@@ -162,18 +153,18 @@ impl Unit {
                 }
             }
 
-            self.collision.x += y_move * dt * UNIT_SPEED * self.rotation.cos();
-            self.collision.y += y_move * dt * UNIT_SPEED * self.rotation.sin();
+            self.collision.x -= dt * UNIT_SPEED * self.rotation.cos();
+            self.collision.y -= dt * UNIT_SPEED * self.rotation.sin();
         }
     }
 
-    pub fn draw_collision(&self) {
+    pub fn draw_collision(&self, color: Color) {
         draw_circle_lines(
             self.collision.x,
             self.collision.y,
             self.collision.r,
             1.,
-            BLUE
+            color
         )
     }
 
@@ -245,10 +236,11 @@ async fn main() {
 
         // отрисовка пути
         if VISUAL_DEBUG || is_key_down(KeyCode::LeftShift) || is_key_down(KeyCode::RightShift) {
-            unit.draw_path(dt)
+            unit.draw_path(dt);
+            unit.draw_collision(BLUE);
         }
         if unit.selected {
-            unit.draw_collision();
+            unit.draw_collision(BLUE);
             unit.draw_path(dt)
         }
         unit.draw(texture);
