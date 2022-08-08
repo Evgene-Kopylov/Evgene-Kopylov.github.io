@@ -18,7 +18,7 @@ async fn main() {
     let mut unit = Unit::new();
     let mut selector_frame = SelectorFrame::new();
     let mut reclaimables: Vec<InteractableObject> = Vec::new();
-    for _ in 0..100 {
+    for _ in 0..50 {
         let mut rock = InteractableObject::new();
         reclaimables.push(rock);
     }
@@ -35,13 +35,8 @@ async fn main() {
         for reclaimable in &reclaimables {
             reclaimable.draw_collision();
         }
-        // rock.draw_collision();
 
-        // отрисовка пути
-        if VISUAL_DEBUG || is_key_down(KeyCode::LeftShift) || is_key_down(KeyCode::RightShift) {
-            unit.draw_path(dt)
-        }
-        if unit.selected {
+        if unit.selected || is_key_down(KeyCode::LeftShift) {
             unit.draw_collision();
             unit.draw_path(dt)
         }

@@ -18,8 +18,8 @@ fn get_random_position_on_screen() -> Vec2 {
         .as_nanos() as u64;
     srand(time);
     Vec2::new(
-        gen_range((0.), (screen_width())),
-        gen_range((0.), screen_height())
+        gen_range(0., screen_width()),
+        gen_range(0., screen_height())
     )
 }
 
