@@ -19,8 +19,8 @@ async fn main() {
     let mut selector_frame = SelectorFrame::new();
     let mut reclaimables: Vec<InteractableObject> = Vec::new();
     for _ in 0..50 {
-        let mut rock = InteractableObject::new();
-        reclaimables.push(rock);
+        let mut rec = InteractableObject::new();
+        reclaimables.push(rec);
     }
 
     loop {
@@ -32,8 +32,8 @@ async fn main() {
             10., 20., 30., BLACK
         );
         unit.update(dt, mouse_position);
-        for reclaimable in &reclaimables {
-            reclaimable.draw_collision();
+        for rec in &reclaimables {
+            rec.draw_collision();
         }
 
         if unit.selected || is_key_down(KeyCode::LeftShift) {
