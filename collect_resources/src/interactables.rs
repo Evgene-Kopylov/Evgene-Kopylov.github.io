@@ -29,7 +29,8 @@ fn get_random_size() -> f32 {
         .unwrap()
         .as_nanos() as u64;
     srand(time);
-    gen_range(10., 25.)
+    let res: f32 = gen_range(10., 25.);
+    res.round() as f32
 }
 
 
