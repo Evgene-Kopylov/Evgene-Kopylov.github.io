@@ -1,4 +1,9 @@
+use std::time::{SystemTime, UNIX_EPOCH};
 use macroquad::prelude::*;
+use crate::rand::{
+    gen_range,
+    srand
+};
 
 pub struct InteractableObject {
     position: Vec2,
@@ -6,32 +11,44 @@ pub struct InteractableObject {
     radius: f32,
 }
 
+fn get_random_position_on_screen() -> Vec2 {
+    let time = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_nanos() as u64;
+    srand(time);
+    Vec2::new(
+        gen_range((0.), (screen_width())),
+        gen_range((0.), screen_height())
+    )
+}
+
+fn get_random_size() -> f32 {
+    let time = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_nanos() as u64;
+    srand(time);
+    gen_range(10., 25.)
+}
+
+
 impl InteractableObject {
     pub fn new() -> Self {
         Self {
-            position: Vec2::new(100.0, 100.0),
+            position: get_random_position_on_screen(),
             color: DARKGRAY,
-            radius: 10.0,
+            radius: get_random_size(),
         }
     }
 
-    pub fn update(&mut self) {
+    pub fn draw_collision(&self) {
         draw_rectangle(
             self.position.x,
             self.position.y,
-            10.,
-            10.,
+            self.radius,
+            self.radius,
             self.color,
         );
-    }
-
-    pub fn draw_collision(&self) {
-        draw_circle_lines(
-            self.position.x,
-            self.position.y,
-            self.radius,
-            1.,
-            BLUE
-        )
     }
 }

@@ -17,7 +17,12 @@ async fn main() {
     let texture: Texture2D = load_texture("../materials/path3338.png").await.unwrap();
     let mut unit = Unit::new();
     let mut selector_frame = SelectorFrame::new();
-    let mut rock = InteractableObject::new();
+    let mut reclaimables: Vec<InteractableObject> = Vec::new();
+    for _ in 0..100 {
+        let mut rock = InteractableObject::new();
+        reclaimables.push(rock);
+    }
+
     loop {
         clear_background(GROUND_COLOR);
         let mouse_position: Vec2 = mouse_position().into();
@@ -27,8 +32,10 @@ async fn main() {
             10., 20., 30., BLACK
         );
         unit.update(dt, mouse_position);
-        rock.draw_collision();
-        rock.update();
+        for reclaimable in &reclaimables {
+            reclaimable.draw_collision();
+        }
+        // rock.draw_collision();
 
         // отрисовка пути
         if VISUAL_DEBUG || is_key_down(KeyCode::LeftShift) || is_key_down(KeyCode::RightShift) {
