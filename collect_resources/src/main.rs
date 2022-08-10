@@ -18,8 +18,8 @@ async fn main() {
     let mut unit = Unit::new();
     let mut selector_frame = SelectorFrame::new();
     let mut reclaimables: Vec<InteractableObject> = Vec::new();
-    for _ in 0..50 {
-        let mut rec = InteractableObject::new();
+    for _ in 0..30 {
+        let rec = InteractableObject::new();
         reclaimables.push(rec);
     }
 
@@ -31,7 +31,7 @@ async fn main() {
             "use LMB, RMB, Shift",
             10., 20., 30., BLACK
         );
-        unit.update(dt, mouse_position);
+        unit.update(dt, mouse_position, &mut reclaimables);
         for rec in &reclaimables {
             rec.draw_collision();
         }

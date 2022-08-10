@@ -1,5 +1,7 @@
 use macroquad::prelude::*;
 use settings::*;
+use crate::InteractableObject;
+
 
 pub struct Unit {
     pub collision: Circle,
@@ -7,6 +9,7 @@ pub struct Unit {
     pub order: Vec<Vec2>,
     pub selected: bool,
 }
+
 
 impl Unit {
     pub fn new() -> Self {
@@ -22,7 +25,14 @@ impl Unit {
         }
     }
 
-    pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
+    pub fn update(
+        &mut self,
+        dt: f32,
+        mouse_position: Vec2,
+        reclaimables: &mut Vec<InteractableObject>) {
+
+        self.reclaim(dt, reclaimables);
+
         // указание цели мышкой
         if self.selected && is_mouse_button_released(MouseButton::Right) {
             if is_key_down(KeyCode::LeftShift) {
@@ -85,6 +95,17 @@ impl Unit {
 
             self.collision.x -= dt * UNIT_SPEED * self.rotation.cos();
             self.collision.y -= dt * UNIT_SPEED * self.rotation.sin();
+        }
+    }
+
+    fn reclaim(&mut self, dt: f32, reclaimables: &mut Vec<InteractableObject>) {
+        for rec in reclaimables {
+            if (rec.position.x - self.collision.x).abs() < self.collision.r &&
+                (rec.position.y - self.collision.y).abs() < self.collision.r {
+                rec.position.x = self.collision.x - rec.radius / 2. - 40. * self.rotation.cos();
+                rec.position.y = self.collision.y - rec.radius / 2. - 40. * self.rotation.sin();
+
+            }
         }
     }
 
