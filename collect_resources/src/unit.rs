@@ -31,7 +31,7 @@ impl Unit {
         mouse_position: Vec2,
         reclaimables: &mut Vec<InteractableObject>) {
 
-        self.reclaim(dt, reclaimables);
+        self.reclaim(reclaimables);
 
         // указание цели мышкой
         if self.selected && is_mouse_button_released(MouseButton::Right) {
@@ -98,13 +98,14 @@ impl Unit {
         }
     }
 
-    fn reclaim(&mut self, dt: f32, reclaimables: &mut Vec<InteractableObject>) {
+    fn reclaim(&mut self, reclaimables: &mut Vec<InteractableObject>) {
         for rec in reclaimables {
-            if (rec.position.x - self.collision.x).abs() < self.collision.r &&
-                (rec.position.y - self.collision.y).abs() < self.collision.r {
-                rec.position.x = self.collision.x - rec.radius / 2. - 40. * self.rotation.cos();
-                rec.position.y = self.collision.y - rec.radius / 2. - 40. * self.rotation.sin();
-
+            if (rec.position.x - self.collision.x).powf(2f32) +
+                (rec.position.y - self.collision.y).powf(2f32)
+                < (self.collision.r * 1.2).powf(2f32) {
+                rec.position.x = self.collision.x - 40. * self.rotation.cos();
+                rec.position.y = self.collision.y - 40. * self.rotation.sin();
+                rec.rotation = self.rotation.to_degrees();
             }
         }
     }
