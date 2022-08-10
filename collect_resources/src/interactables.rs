@@ -25,16 +25,6 @@ fn get_random_position_on_screen() -> Vec2 {
     )
 }
 
-fn get_random_size() -> f32 {
-    let time = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap()
-        .as_nanos() as u64;
-    srand(time);
-    let res: f32 = gen_range(10., 25.);
-    res.round() as f32
-}
-
 fn get_random_in_range(low: f32, high: f32) -> f32 {
     let time = SystemTime::now()
         .duration_since(UNIX_EPOCH)
