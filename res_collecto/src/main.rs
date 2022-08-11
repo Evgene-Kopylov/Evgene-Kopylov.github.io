@@ -1,12 +1,15 @@
+mod settings;
+use crate::settings::*;
+
 use macroquad::prelude::*;
 
-const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
-const UNIT_COLOR: Color = ORANGE;
-const SELECTOR_COLOR: Color = YELLOW;
-const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
-const UNIT_SPEED: f32 = 130.0;
-const UNIT_ROTATION_SPEED: f32 = 4.0;
-const VISUAL_DEBUG: bool = false;
+// const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
+// const UNIT_COLOR: Color = ORANGE;
+// const SELECTOR_COLOR: Color = YELLOW;
+// const UNIT_SIZE: (f32, f32) = (60.0, 75.0);
+// const UNIT_SPEED: f32 = 130.0;
+// const UNIT_ROTATION_SPEED: f32 = 4.0;
+// const VISUAL_DEBUG: bool = false;
 
 
 struct Unit {
