@@ -18,8 +18,8 @@ async fn main() {
     let mut unit = Unit::new();
     let mut selector_frame = SelectorFrame::new();
     let mut reclaimables: Vec<InteractableObject> = Vec::new();
-    for _ in 0..30 {
-        let rec = InteractableObject::new();
+    for i in 0..30 {
+        let rec = InteractableObject::new(i as u64);
         reclaimables.push(rec);
     }
 

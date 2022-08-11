@@ -13,8 +13,6 @@ pub struct InteractableObject {
 }
 
 fn get_random_position_on_screen() -> Vec2 {
-    let time = (instant::now() * 100000.) as u64;
-    srand(time);
     Vec2::new(
         gen_range(0., screen_width()),
         gen_range(0., screen_height())
@@ -22,14 +20,13 @@ fn get_random_position_on_screen() -> Vec2 {
 }
 
 fn get_random_in_range(low: f32, high: f32) -> f32 {
-    let time = (instant::now() * 100000.) as u64;
-    srand(time);
     let res: f32 = gen_range(low, high);
     res
 }
 
 impl InteractableObject {
-    pub fn new() -> Self {
+    pub fn new(seed: u64) -> Self {
+        srand(seed);
         Self {
             position: get_random_position_on_screen(),
             color: DARKGRAY,
