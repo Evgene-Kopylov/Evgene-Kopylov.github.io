@@ -1,4 +1,3 @@
-use std::time::{SystemTime, UNIX_EPOCH};
 use macroquad::prelude::*;
 use crate::rand::{
     gen_range,
@@ -14,10 +13,7 @@ pub struct InteractableObject {
 }
 
 fn get_random_position_on_screen() -> Vec2 {
-    let time = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap()
-        .as_nanos() as u64;
+    let time = (instant::now() * 100000.) as u64;
     srand(time);
     Vec2::new(
         gen_range(0., screen_width()),
@@ -26,10 +22,7 @@ fn get_random_position_on_screen() -> Vec2 {
 }
 
 fn get_random_in_range(low: f32, high: f32) -> f32 {
-    let time = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap()
-        .as_nanos() as u64;
+    let time = (instant::now() * 100000.) as u64;
     srand(time);
     let res: f32 = gen_range(low, high);
     res
@@ -43,8 +36,6 @@ impl InteractableObject {
             radius: 12.0,
             rotation: get_random_in_range(-180., 180.),
             sides: get_random_in_range(1., 6.) as u8,
-
-            // radius: get_random_size(),
         }
     }
 
