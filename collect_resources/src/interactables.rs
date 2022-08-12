@@ -25,13 +25,7 @@ fn get_random_in_range(low: f32, high: f32) -> f32 {
 }
 
 impl InteractableObject {
-    /// Arguments:
-    ///
     /// * `seed`: The seed for the random number generator.
-    ///
-    /// Returns:
-    ///
-    /// A new instance of the InteractableObject struct.
     pub fn new(seed: u64) -> Self {
         srand(seed);
         Self {
