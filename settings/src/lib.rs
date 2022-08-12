@@ -1,5 +1,4 @@
 use macroquad::prelude::{
-    // GRAY,
     YELLOW,
     ORANGE,
     Color,
