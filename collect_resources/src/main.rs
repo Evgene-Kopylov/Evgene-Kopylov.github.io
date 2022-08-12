@@ -1,5 +1,6 @@
 use macroquad::prelude::*;
-use settings::*;
+mod settings;
+use crate::settings::*;
 
 mod unit;
 use unit::Unit;
@@ -8,6 +9,7 @@ mod select_frame;
 use select_frame::SelectorFrame;
 
 mod interactables;
+
 use crate::interactables::InteractableObject;
 
 

@@ -1,5 +1,5 @@
 use macroquad::prelude::*;
-use settings::*;
+use crate::settings::*;
 use crate::InteractableObject;
 
 

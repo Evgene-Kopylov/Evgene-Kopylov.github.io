@@ -8,4 +8,3 @@ edition = "2021"
 
 [dependencies]
 macroquad = "0.3.23"
-settings = {path = "../settings"}
