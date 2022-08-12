@@ -25,9 +25,8 @@ fn get_random_in_range(low: f32, high: f32) -> f32 {
 }
 
 impl InteractableObject {
-    /// * `seed`: The seed for the random number generator.
-    pub fn new(seed: u64) -> Self {
-        srand(seed);
+    pub fn new(random_seed: u64) -> Self {
+        srand(random_seed);
         Self {
             position: get_random_position_on_screen(),
             color: DARKGRAY,
