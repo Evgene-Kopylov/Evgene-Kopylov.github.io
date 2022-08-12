@@ -12,27 +12,19 @@ pub struct InteractableObject {
     pub sides: u8,
 }
 
-fn get_random_position_on_screen() -> Vec2 {
-    Vec2::new(
-        gen_range(0., screen_width()),
-        gen_range(0., screen_height())
-    )
-}
-
-fn get_random_in_range(low: f32, high: f32) -> f32 {
-    let res: f32 = gen_range(low, high);
-    res
-}
 
 impl InteractableObject {
     pub fn new(random_seed: u64) -> Self {
         srand(random_seed);
         Self {
-            position: get_random_position_on_screen(),
+            position: Vec2::new(
+                gen_range(0., screen_width()),
+                gen_range(0., screen_height())
+            ),
             color: DARKGRAY,
             radius: 12.0,
-            rotation: get_random_in_range(-180., 180.),
-            sides: get_random_in_range(1., 6.) as u8,
+            rotation: gen_range(-180., 180.),
+            sides: gen_range(1., 6.) as u8,
         }
     }
 
