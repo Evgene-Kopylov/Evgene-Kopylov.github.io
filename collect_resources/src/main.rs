@@ -29,10 +29,6 @@ async fn main() {
         clear_background(GROUND_COLOR);
         let mouse_position: Vec2 = mouse_position().into();
         let dt = get_frame_time();
-        draw_text(
-            "use LMB, RMB, Shift",
-            10., 20., 30., BLACK
-        );
         unit.update(dt, mouse_position, &mut reclaimables);
         for rec in &reclaimables {
             rec.draw_collision();
