@@ -1,10 +1,13 @@
 use macroquad::prelude::*;
+use macroquad::time::get_time;
 use crate::rand::{
     gen_range,
     srand
 };
 
 pub struct InteractableObject {
+    pub uid: String,
+    // pub state: InteractableObjectState,
     pub position: Vec2,
     pub color: Color,
     pub radius: f32,
@@ -16,7 +19,10 @@ pub struct InteractableObject {
 impl InteractableObject {
     pub fn new(random_seed: u64) -> Self {
         srand(random_seed);
+        println!("seed{}@{}", random_seed, get_time());
         Self {
+            uid: format!("seed{}@{}", random_seed, get_time()),
+            // state: InteractableObjectState::Raw,
             position: Vec2::new(
                 gen_range(0., screen_width()),
                 gen_range(0., screen_height())
