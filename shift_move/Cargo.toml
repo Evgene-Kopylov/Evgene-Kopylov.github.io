@@ -1,5 +1,5 @@
 [package]
-name = "pointer"
+name = "shift_move"
 version = "0.1.0"
 edition = "2021"
 
