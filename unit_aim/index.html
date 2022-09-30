@@ -61,7 +61,7 @@
     </div>
     <div class="grid border-dashed border-2 border-slate-500 mx-2">
       <!-- output section where we show the stdout of the python code execution -->
-      <canvas class="game_window" id="glcanvas" tabindex='1'></canvas>
+      <canvas class="game_window" id="glcanvas" tabindex='1'  oncontextmenu="return false;"></canvas>
 
       <textarea readonly class="p-6 text-slate-200 bg-slate-900" id="output" name="output"></textarea>
     </div>
@@ -72,7 +72,7 @@
   <!-- clean the output section -->
   <button onclick="clearHistory()" type="button" class="mx-2 my-4 h-12 px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm bg-red-700 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700 text-slate-300">Clear History</button>
   <script src="https://not-fl3.github.io/miniquad-samples/mq_js_bundle.js"></script>
-  <script>load("../wasd_rect/pointer.wasm");</script> <!-- Your compiled wasm file -->
+  <script>load("../collect_resources/collect_resources.wasm");</script> <!-- Your compiled wasm file -->
   <script src="static/js/main.js"></script>
 </body>
 </html>
