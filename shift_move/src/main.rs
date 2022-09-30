@@ -95,7 +95,7 @@ impl Unit {
     pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
         // указание цели мышкой
         if self.selected && is_mouse_button_released(MouseButton::Right) {
-            if is_key_down(KeyCode::LeftShift) {
+            if is_key_down(KeyCode::LeftShift) || is_key_down(KeyCode::LeftControl) {
                 self.order.push(mouse_position);
             } else {
                 self.order.clear();
