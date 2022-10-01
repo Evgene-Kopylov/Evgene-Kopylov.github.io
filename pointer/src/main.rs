@@ -1,8 +1,8 @@
 use macroquad::prelude::*;
 
 
-const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
-const UNIT_COLOR: Color = WHITE;
+const GROUND_COLOR: Color = Color::new(0.77, 0.8, 0.8, 1.00);
+const UNIT_COLOR: Color = Color::new(0.94, 0.94, 0.94, 1.); // 0.94, 0.94, 0.94
 const PROJECTILE_COLOR: Color = Color::new(1.00, 0.96, 0.84, 1.00);
 
 struct Projectile {
@@ -104,7 +104,7 @@ impl Unit {
         if is_mouse_button_pressed(MouseButton::Left) {
             let size = (
                 self.projectile_textusre.width(), self.projectile_textusre.height());
-            let speed = self.speed * 2.;
+            let speed = self.speed * 2.3;
             let position = (  // точка появления выстрела
                 self.position.0 + 65. * (self.rotation - f32::to_radians(90.)).cos(),
                 self.position.1 + 65. * (self.rotation - f32::to_radians(90.)).sin()
@@ -144,24 +144,38 @@ impl Unit {
         }
 
         // Юнит
+        // тень
         draw_texture_ex(
             self.texture,
-            self.position.0 - self.size.0 * 0.5,
-            self.position.1 - self.size.1 * 0.5,
-            WHITE,
+            self.position.0 - self.size.0 * 0.5 + 3.,
+            self.position.1 - self.size.1 * 0.5 + 4.,
+            DARKGRAY,
             DrawTextureParams {
                 dest_size: Some(Vec2::new(self.size .0, self.size.1)),
                 rotation: self.rotation,
                 ..Default::default()
             }
         );
+        // сам юнит
+        draw_texture_ex(
+            self.texture,
+            self.position.0 - self.size.0 * 0.5,
+            self.position.1 - self.size.1 * 0.5,
+            UNIT_COLOR,
+            DrawTextureParams {
+                dest_size: Some(Vec2::new(self.size .0, self.size.1)),
+                rotation: self.rotation,
+                ..Default::default()
+            }
+        );
+
     }
 }
 
 
 #[macroquad::main("breakout")]
 async fn main() {
-    let texture: Texture2D = load_texture("../materials/pointer_3.png").await.unwrap();
+    let texture: Texture2D = load_texture("../materials/pointer/pointer_3.png").await.unwrap();
     let projectile_textusre = load_texture(
         "../materials/pointer/projectile_glow_large.png").await.unwrap();
     let mut  spawn_position = (screen_width() * 0.5, screen_height() - 130.);
