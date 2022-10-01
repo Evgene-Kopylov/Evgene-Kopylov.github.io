@@ -1,16 +1,11 @@
 use macroquad::prelude::*;
 
-
 mod settings;
 use settings::*;
 
+mod projectile;
+use projectile::*;
 
-struct Projectile {
-    rotation: f32,
-    position: (f32, f32),
-    size: (f32, f32),
-    speed: f32,
-}
 
 struct Unit {
     texture: Texture2D,
@@ -24,16 +19,7 @@ struct Unit {
     projectiles: Vec<Projectile>
 }
 
-impl Projectile {
-    pub fn new(rotation: f32, position: (f32, f32), size: (f32, f32), speed: f32) -> Projectile {
-        Projectile {
-            rotation,
-            position,
-            size,
-            speed,
-        }
-    }
-}
+
 
 impl Unit {
     pub fn new(
