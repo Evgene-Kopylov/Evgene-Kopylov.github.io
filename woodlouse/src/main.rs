@@ -88,7 +88,7 @@ impl Unit {
 
 #[macroquad::main("breakout")]
 async fn main() {
-    let texture: Texture2D = load_texture("materials/path726-5.png").await.unwrap();
+    let texture: Texture2D = load_texture("../assets/path726-5.png").await.unwrap();
     let mut unit = Unit::new();
 
     loop {

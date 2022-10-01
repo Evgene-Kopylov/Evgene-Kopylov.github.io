@@ -229,7 +229,7 @@ impl Unit {
 
 #[macroquad::main("breakout")]
 async fn main() {
-    let texture: Texture2D = load_texture("materials/path3333.png").await.unwrap();
+    let texture: Texture2D = load_texture("../assets/path3333.png").await.unwrap();
     let mut unit = Unit::new();
     let mut selector_frame = SelectorFrame::new();
 
