@@ -7,6 +7,7 @@ struct Projectile {
     rotation: f32,
     position: (f32, f32),
     size: (f32, f32),
+    speed: f32,
 }
 
 struct Unit {
@@ -22,11 +23,12 @@ struct Unit {
 }
 
 impl Projectile {
-    pub fn new(rotation: f32, position: (f32, f32), size: (f32, f32)) -> Projectile {
+    pub fn new(rotation: f32, position: (f32, f32), size: (f32, f32), speed: f32) -> Projectile {
         Projectile {
             rotation,
             position,
             size,
+            speed,
         }
     }
 }
@@ -100,10 +102,26 @@ impl Unit {
         if is_mouse_button_pressed(MouseButton::Left) {
             let size = (
                 self.projectile_textusre.width(), self.projectile_textusre.height());
+            let speed = self.speed * 2.;
+            let position = (
+                self.position.0 + 62. * (self.rotation - f32::to_radians(90.)).cos(),
+                self.position.1 + 62. * (self.rotation - f32::to_radians(90.)).sin()
+            );
+
             let mut projectile = Projectile::new(
-                self.rotation, self.position, size);
+                self.rotation, position, size, speed);
             self.projectiles.push(projectile);
         }
+
+        for i in 0..self.projectiles.len() {
+            self.projectiles[i].position.0 +=
+                dt * self.projectiles[i].speed *
+                    (self.projectiles[i].rotation - f32::to_radians(90.)).cos();
+            self.projectiles[i].position.1 +=
+                dt * self.projectiles[i].speed *
+                    (self.projectiles[i].rotation - f32::to_radians(90.)).sin();
+        }
+
 
     }
 
@@ -114,7 +132,7 @@ impl Unit {
                 self.projectile_textusre,
                 projectile.position.0 - projectile.size.0 * 0.5,
                 projectile.position.1 - projectile.size.1 * 0.5,
-                YELLOW,
+                WHITE,
                 DrawTextureParams {
                     dest_size: Some(Vec2::new(projectile.size .0, projectile.size.1)),
                     rotation: projectile.rotation,
