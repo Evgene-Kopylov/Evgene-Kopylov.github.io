@@ -14,14 +14,14 @@ struct Unit {
 }
 
 impl Unit {
-    pub fn new(texture: Texture2D) -> Self {
+    pub fn new(texture: Texture2D, position: (f32, f32)) -> Self {
         Self {
             texture,
             size: (texture.width(), texture.height()),
             scale: 1.,
             radius: f32::max(texture.width(), texture.height()),
             rotation: 0.,
-            position: (screen_width() * 0.5, screen_height() * 0.5),
+            position,
             speed: 300.,
         }
     }
@@ -95,7 +95,8 @@ impl Unit {
 #[macroquad::main("breakout")]
 async fn main() {
     let texture: Texture2D = load_texture("../materials/pointer_0.png").await.unwrap();
-    let mut unit = Unit::new(texture);
+    let mut  spawn_position = (screen_width() * 0.5, screen_height() - 130.);
+    let mut unit = Unit::new(texture, spawn_position);
 
     loop {
         let mouse_position: Vec2 = mouse_position().into();
