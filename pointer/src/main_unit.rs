@@ -3,7 +3,7 @@ use crate::projectile::*;
 use crate::settings::*;
 
 
-pub struct Unit {
+pub struct MainUnit {
     pub texture: Texture2D,
     pub size: (f32, f32),
     pub scale: f32,
@@ -16,7 +16,7 @@ pub struct Unit {
 }
 
 
-impl Unit {
+impl MainUnit {
     pub fn new(
         texture: Texture2D,
         projectile_texture: Texture2D,
