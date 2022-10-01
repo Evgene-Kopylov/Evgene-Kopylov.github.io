@@ -2,8 +2,6 @@ use macroquad::prelude::*;
 
 
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
-const UNIT_SIZE: Vec2 = const_vec2!([40., 40.]);
-const UNIT_SPEED: f32 = 300.0;
 
 struct Unit {
     texture: Texture2D,
@@ -12,7 +10,7 @@ struct Unit {
     radius: f32,
     rotation: f32,
     position: (f32, f32),
-    rect: Rect
+    speed: f32,
 }
 
 impl Unit {
@@ -24,12 +22,7 @@ impl Unit {
             radius: f32::max(texture.width(), texture.height()),
             rotation: 0.,
             position: (screen_width() * 0.5, screen_height() * 0.5),
-            rect: Rect::new(
-                screen_width() * 0.5 - UNIT_SIZE.x * 0.5,
-                screen_height() * 0.5 - UNIT_SIZE.y * 0.5,
-                UNIT_SIZE.x,
-                UNIT_SIZE.y,
-            )
+            speed: 300.,
         }
     }
 
@@ -50,22 +43,23 @@ impl Unit {
             y_move += 1f32;
         }
 
-        if self.rect.x < 1f32 {
+        if self.position.0 < 1f32 {
             x_move = 1f32;
         }
-        if self.rect.x > screen_width() - self.rect.w {
+        if self.position.0 > screen_width() {
             x_move = -1f32;
         }
 
-        if self.rect.y < 1f32 {
+        if self.position.1 < 1f32 {
             y_move = 1f32;
         }
-        if self.rect.y > screen_height() - self.rect.h {
+        if self.position.1 > screen_height() {
             y_move = -1f32;
         }
 
-        self.rect.x += x_move * dt * UNIT_SPEED;
-        self.rect.y += y_move * dt * UNIT_SPEED;
+        self.position.0 += x_move * dt * self.speed;
+        self.position.1 += y_move * dt * self.speed;
+
     }
 
     pub fn draw(&self) {
@@ -79,14 +73,6 @@ impl Unit {
                 rotation: self.rotation,
                 ..Default::default()
             }
-        );
-
-        draw_rectangle(
-            self.rect.x,
-            self.rect.y,
-            self.rect.w,
-            self.rect.h,
-            GRAY
         );
     }
 }
