@@ -1,3 +1,5 @@
+use macroquad::audio;
+use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
 use crate::projectile::*;
 use crate::settings::*;
@@ -5,6 +7,7 @@ use crate::settings::*;
 
 pub struct MainUnit {
     pub texture: Texture2D,
+    pub shoot_sound: Sound,
     pub size: (f32, f32),
     pub scale: f32,
     pub radius: f32,
@@ -22,10 +25,11 @@ impl MainUnit {
     pub fn new(
         texture: Texture2D,
         projectile_texture: Texture2D,
+        shoot_sound: Sound,
         position: (f32, f32)
     ) -> Self {
         Self {
-            texture, projectile_texture,
+            texture, projectile_texture, shoot_sound,
             size: (texture.width(), texture.height()),
             scale: 1.,
             radius: f32::max(texture.width(), texture.height()),
@@ -91,7 +95,7 @@ impl MainUnit {
         if is_mouse_button_down(MouseButton::Left) && self.shoot_timer >= self.shoot_delay {
             let size = (
                 self.projectile_texture.width(), self.projectile_texture.height());
-            let speed = self.speed * 2.3;
+            let speed = self.speed * 3.;
             let position = (  // точка появления выстрела
                 self.position.0 + 65. * (self.rotation - f32::to_radians(90.)).cos(),
                 self.position.1 + 65. * (self.rotation - f32::to_radians(90.)).sin()
@@ -106,6 +110,10 @@ impl MainUnit {
             );
             self.projectiles.push(projectile);
             self.shoot_timer = 0.;
+            let mut sound_params: PlaySoundParams = PlaySoundParams::default();
+            sound_params.looped = false;
+            sound_params.volume = 0.16;
+            audio::play_sound(self.shoot_sound, sound_params);
         }
 
         for i in 0..self.projectiles.len() {

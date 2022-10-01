@@ -1,3 +1,4 @@
+use macroquad::audio::{load_sound, Sound};
 use macroquad::prelude::*;
 
 mod settings;
@@ -17,9 +18,16 @@ async fn main() {
     let projectile_texture = load_texture(
         "../materials/pointer/projectile_glow_large.png").await.unwrap();
 
+    let shoot_sound: Sound = load_sound(
+        "../materials/sound/XAL_Weapon.wav" // Хорошо
+        // "../materials/sound/URLWeapon.wav" // Хорошо
+        // "../materials/sound/URSWeapon.wav" // Очень хорошо
+        // "../materials/sound/XAL_Weapon.wav" // Хорошо
+    ).await.unwrap();
+
     let spawn_position = (screen_width() * 0.5, screen_height() - 130.);
     let mut main_unit = MainUnit::new(
-        main_unit_texture, projectile_texture, spawn_position);
+        main_unit_texture, projectile_texture, shoot_sound, spawn_position);
 
     loop {
         let mouse_position: Vec2 = mouse_position().into();
