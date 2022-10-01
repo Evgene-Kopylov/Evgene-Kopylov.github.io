@@ -12,7 +12,9 @@ pub struct MainUnit {
     pub position: (f32, f32),
     pub speed: f32,
     pub projectile_texture: Texture2D,
-    pub projectiles: Vec<Projectile>
+    pub projectiles: Vec<Projectile>,
+    shoot_timer: f32,
+    shoot_delay: f32,
 }
 
 
@@ -31,10 +33,14 @@ impl MainUnit {
             position,
             speed: 300.,
             projectiles: Vec::new(),
+            shoot_timer: 0.,
+            shoot_delay: MAIN_UNIT_SHOOT_DELAY,
         }
     }
 
     pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
+        self.shoot_timer += dt;
+        // print!("self.shoot_timer {}\ndt {}\n", self.shoot_timer, dt);
         let mut x_move = 0f32;
         if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {
             x_move -= 1f32;
@@ -82,13 +88,13 @@ impl MainUnit {
             self.rotation = (dy / dx).atan() - f32::to_radians(270.);
         }
 
-        if is_mouse_button_pressed(MouseButton::Left) {
+        if is_mouse_button_down(MouseButton::Left) && self.shoot_timer >= self.shoot_delay {
             let size = (
                 self.projectile_texture.width(), self.projectile_texture.height());
             let speed = self.speed * 2.3;
             let position = (  // точка появления выстрела
-                          self.position.0 + 65. * (self.rotation - f32::to_radians(90.)).cos(),
-                          self.position.1 + 65. * (self.rotation - f32::to_radians(90.)).sin()
+                self.position.0 + 65. * (self.rotation - f32::to_radians(90.)).cos(),
+                self.position.1 + 65. * (self.rotation - f32::to_radians(90.)).sin()
             );
 
             let projectile = Projectile::new(
@@ -99,6 +105,7 @@ impl MainUnit {
                 speed
             );
             self.projectiles.push(projectile);
+            self.shoot_timer = 0.;
         }
 
         for i in 0..self.projectiles.len() {
