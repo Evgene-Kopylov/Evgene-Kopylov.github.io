@@ -2,6 +2,8 @@ use macroquad::prelude::*;
 
 
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
+const UNIT_COLOR: Color = WHITE;
+const PROJECTILE_COLOR: Color = Color::new(1.00, 0.96, 0.84, 1.00);
 
 struct Projectile {
     rotation: f32,
@@ -103,9 +105,9 @@ impl Unit {
             let size = (
                 self.projectile_textusre.width(), self.projectile_textusre.height());
             let speed = self.speed * 2.;
-            let position = (
-                self.position.0 + 62. * (self.rotation - f32::to_radians(90.)).cos(),
-                self.position.1 + 62. * (self.rotation - f32::to_radians(90.)).sin()
+            let position = (  // точка появления выстрела
+                self.position.0 + 65. * (self.rotation - f32::to_radians(90.)).cos(),
+                self.position.1 + 65. * (self.rotation - f32::to_radians(90.)).sin()
             );
 
             let mut projectile = Projectile::new(
@@ -132,7 +134,7 @@ impl Unit {
                 self.projectile_textusre,
                 projectile.position.0 - projectile.size.0 * 0.5,
                 projectile.position.1 - projectile.size.1 * 0.5,
-                WHITE,
+                PROJECTILE_COLOR,
                 DrawTextureParams {
                     dest_size: Some(Vec2::new(projectile.size .0, projectile.size.1)),
                     rotation: projectile.rotation,
@@ -161,7 +163,7 @@ impl Unit {
 async fn main() {
     let texture: Texture2D = load_texture("../materials/pointer_3.png").await.unwrap();
     let projectile_textusre = load_texture(
-        "../materials/pointer/projectile.png").await.unwrap();
+        "../materials/pointer/projectile_glow_large.png").await.unwrap();
     let mut  spawn_position = (screen_width() * 0.5, screen_height() - 130.);
     let mut unit = Unit::new(texture, projectile_textusre, spawn_position);
 
