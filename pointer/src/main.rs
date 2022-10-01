@@ -1,9 +1,9 @@
 use macroquad::prelude::*;
 
 
-const GROUND_COLOR: Color = Color::new(0.77, 0.8, 0.8, 1.00);
-const UNIT_COLOR: Color = Color::new(0.94, 0.94, 0.94, 1.); // 0.94, 0.94, 0.94
-const PROJECTILE_COLOR: Color = Color::new(1.00, 0.96, 0.84, 1.00);
+mod settings;
+use settings::*;
+
 
 struct Projectile {
     rotation: f32,
