@@ -11,7 +11,8 @@ use pointer::*;
 
 #[macroquad::main("breakout")]
 async fn main() {
-    let texture: Texture2D = load_texture("../materials/pointer/pointer_3.png").await.unwrap();
+    let texture: Texture2D = load_texture(
+        "../materials/pointer/pointer_3.png").await.unwrap();
     let projectile_texture = load_texture(
         "../materials/pointer/projectile_glow_large.png").await.unwrap();
     let spawn_position = (screen_width() * 0.5, screen_height() - 130.);

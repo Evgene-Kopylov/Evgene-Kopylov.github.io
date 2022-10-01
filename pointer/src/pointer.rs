@@ -1,5 +1,5 @@
 use macroquad::prelude::*;
-use crate::projectile::Projectile;
+use crate::projectile::*;
 use crate::settings::*;
 
 
@@ -87,12 +87,17 @@ impl Unit {
                 self.projectile_texture.width(), self.projectile_texture.height());
             let speed = self.speed * 2.3;
             let position = (  // точка появления выстрела
-                              self.position.0 + 65. * (self.rotation - f32::to_radians(90.)).cos(),
-                              self.position.1 + 65. * (self.rotation - f32::to_radians(90.)).sin()
+                          self.position.0 + 65. * (self.rotation - f32::to_radians(90.)).cos(),
+                          self.position.1 + 65. * (self.rotation - f32::to_radians(90.)).sin()
             );
 
             let projectile = Projectile::new(
-                self.rotation, position, size, speed);
+                self.projectile_texture,
+                self.rotation,
+                position,
+                size,
+                speed
+            );
             self.projectiles.push(projectile);
         }
 
@@ -111,20 +116,8 @@ impl Unit {
     pub fn draw(&self) {
         // Выстрелы
         for projectile in &self.projectiles {
-            draw_texture_ex(
-                self.projectile_texture,
-                projectile.position.0 - projectile.size.0 * 0.5,
-                projectile.position.1 - projectile.size.1 * 0.5,
-                PROJECTILE_COLOR,
-                DrawTextureParams {
-                    dest_size: Some(Vec2::new(projectile.size .0, projectile.size.1)),
-                    rotation: projectile.rotation,
-                    ..Default::default()
-                }
-            );
+            projectile.draw();
         }
-
-        // Юнит
         // тень
         draw_texture_ex(
             self.texture,
