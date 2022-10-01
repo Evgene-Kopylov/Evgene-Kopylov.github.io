@@ -26,7 +26,7 @@ impl Unit {
         }
     }
 
-    pub fn update(&mut self, dt: f32) {
+    pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
         let mut x_move = 0f32;
         if is_key_down(KeyCode::Left) {
             x_move -= 1f32;
@@ -60,6 +60,20 @@ impl Unit {
         self.position.0 += x_move * dt * self.speed;
         self.position.1 += y_move * dt * self.speed;
 
+        // поворот в сторону курсора
+        self.rotation = self.rotation % f32::to_radians(360.);
+        let mut dx = self.position.0 - mouse_position.x;
+        if dx == 0f32 { dx += 1f32; };
+
+        let mut dy = self.position.1 - mouse_position.y;
+        if dy == 0f32 { dy += 1f32; };
+
+        if dx >= 0f32 {
+            self.rotation = (dy / dx).atan() - f32::to_radians(90.);
+        } else {
+            self.rotation = (dy / dx).atan() - f32::to_radians(270.);
+        }
+
     }
 
     pub fn draw(&self) {
@@ -84,7 +98,8 @@ async fn main() {
     let mut unit = Unit::new(texture);
 
     loop {
-        unit.update(get_frame_time());
+        let mouse_position: Vec2 = mouse_position().into();
+        unit.update(get_frame_time(), mouse_position);
         clear_background(GROUND_COLOR);
         unit.draw();
         next_frame().await
