@@ -3,6 +3,12 @@ use macroquad::prelude::*;
 
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
 
+struct Projectile {
+    rotation: f32,
+    position: (f32, f32),
+    size: (f32, f32),
+}
+
 struct Unit {
     texture: Texture2D,
     size: (f32, f32),
@@ -11,18 +17,35 @@ struct Unit {
     rotation: f32,
     position: (f32, f32),
     speed: f32,
+    projectile_textusre: Texture2D,
+    projectiles: Vec<Projectile>
+}
+
+impl Projectile {
+    pub fn new(rotation: f32, position: (f32, f32), size: (f32, f32)) -> Projectile {
+        Projectile {
+            rotation,
+            position,
+            size,
+        }
+    }
 }
 
 impl Unit {
-    pub fn new(texture: Texture2D, position: (f32, f32)) -> Self {
+    pub fn new(
+        texture: Texture2D,
+        projectile_textusre: Texture2D,
+        position: (f32, f32)
+    ) -> Self {
         Self {
-            texture,
+            texture, projectile_textusre,
             size: (texture.width(), texture.height()),
             scale: 1.,
             radius: f32::max(texture.width(), texture.height()),
             rotation: 0.,
             position,
             speed: 300.,
+            projectiles: Vec::new(),
         }
     }
 
@@ -74,9 +97,33 @@ impl Unit {
             self.rotation = (dy / dx).atan() - f32::to_radians(270.);
         }
 
+        if is_mouse_button_pressed(MouseButton::Left) {
+            let size = (
+                self.projectile_textusre.width(), self.projectile_textusre.height());
+            let mut projectile = Projectile::new(
+                self.rotation, self.position, size);
+            self.projectiles.push(projectile);
+        }
+
     }
 
     pub fn draw(&self) {
+        // Выстрелы
+        for projectile in &self.projectiles {
+            draw_texture_ex(
+                self.projectile_textusre,
+                projectile.position.0 - projectile.size.0 * 0.5,
+                projectile.position.1 - projectile.size.1 * 0.5,
+                YELLOW,
+                DrawTextureParams {
+                    dest_size: Some(Vec2::new(projectile.size .0, projectile.size.1)),
+                    rotation: projectile.rotation,
+                    ..Default::default()
+                }
+            );
+        }
+
+        // Юнит
         draw_texture_ex(
             self.texture,
             self.position.0 - self.size.0 * 0.5,
@@ -94,9 +141,11 @@ impl Unit {
 
 #[macroquad::main("breakout")]
 async fn main() {
-    let texture: Texture2D = load_texture("../materials/pointer_0.png").await.unwrap();
+    let texture: Texture2D = load_texture("../materials/pointer_3.png").await.unwrap();
+    let projectile_textusre = load_texture(
+        "../materials/pointer/projectile.png").await.unwrap();
     let mut  spawn_position = (screen_width() * 0.5, screen_height() - 130.);
-    let mut unit = Unit::new(texture, spawn_position);
+    let mut unit = Unit::new(texture, projectile_textusre, spawn_position);
 
     loop {
         let mouse_position: Vec2 = mouse_position().into();
