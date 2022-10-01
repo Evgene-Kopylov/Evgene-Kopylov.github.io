@@ -111,8 +111,7 @@ impl MainUnit {
             self.projectiles.push(projectile);
             self.shoot_timer = 0.;
             let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-            sound_params.looped = false;
-            sound_params.volume = 0.16;
+            sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME;
             audio::play_sound(self.shoot_sound, sound_params);
         }
 

@@ -12,18 +12,9 @@ use main_unit::*;
 
 #[macroquad::main("breakout")]
 async fn main() {
-    let main_unit_texture: Texture2D = load_texture(
-        "../materials/pointer/pointer_3.png").await.unwrap();
-
-    let projectile_texture = load_texture(
-        "../materials/pointer/projectile_glow_large.png").await.unwrap();
-
-    let shoot_sound: Sound = load_sound(
-        "../materials/sound/XAL_Weapon.wav" // Хорошо
-        // "../materials/sound/URLWeapon.wav" // Хорошо
-        // "../materials/sound/URSWeapon.wav" // Очень хорошо
-        // "../materials/sound/XAL_Weapon.wav" // Хорошо
-    ).await.unwrap();
+    let main_unit_texture: Texture2D = load_texture(MAIN_UNIT_TEXTURE_PATH).await.unwrap();
+    let projectile_texture = load_texture(PROJECTILE_TEXTURE_PATH).await.unwrap();
+    let shoot_sound: Sound = load_sound(MAIN_UNIT_SHOOT_SOUND_ASSET).await.unwrap();
 
     let spawn_position = (screen_width() * 0.5, screen_height() - 130.);
     let mut main_unit = MainUnit::new(
