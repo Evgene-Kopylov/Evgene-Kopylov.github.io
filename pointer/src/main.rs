@@ -28,18 +28,18 @@ impl Unit {
 
     pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
         let mut x_move = 0f32;
-        if is_key_down(KeyCode::Left) {
+        if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {
             x_move -= 1f32;
         }
-        if is_key_down(KeyCode::Right) {
+        if is_key_down(KeyCode::Right) || is_key_down(KeyCode::D){
             x_move += 1f32;
         }
 
         let mut y_move = 0f32;
-        if is_key_down(KeyCode::Up) {
+        if is_key_down(KeyCode::Up) || is_key_down(KeyCode::W) {
             y_move -= 1f32;
         }
-        if is_key_down(KeyCode::Down) {
+        if is_key_down(KeyCode::Down) || is_key_down(KeyCode::S) {
             y_move += 1f32;
         }
 
