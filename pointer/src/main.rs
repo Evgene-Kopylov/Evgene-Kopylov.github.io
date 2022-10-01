@@ -4,7 +4,6 @@ mod settings;
 use settings::*;
 
 mod projectile;
-use projectile::*;
 
 mod pointer;
 use pointer::*;
@@ -15,7 +14,7 @@ async fn main() {
     let texture: Texture2D = load_texture("../materials/pointer/pointer_3.png").await.unwrap();
     let projectile_texture = load_texture(
         "../materials/pointer/projectile_glow_large.png").await.unwrap();
-    let mut  spawn_position = (screen_width() * 0.5, screen_height() - 130.);
+    let spawn_position = (screen_width() * 0.5, screen_height() - 130.);
     let mut unit = Unit::new(texture, projectile_texture, spawn_position);
 
     loop {

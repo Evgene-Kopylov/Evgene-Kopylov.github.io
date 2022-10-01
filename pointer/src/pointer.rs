@@ -91,7 +91,7 @@ impl Unit {
                               self.position.1 + 65. * (self.rotation - f32::to_radians(90.)).sin()
             );
 
-            let mut projectile = Projectile::new(
+            let projectile = Projectile::new(
                 self.rotation, position, size, speed);
             self.projectiles.push(projectile);
         }
