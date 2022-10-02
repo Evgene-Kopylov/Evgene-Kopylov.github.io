@@ -3,7 +3,6 @@ use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
 use crate::projectile::*;
 use crate::settings::*;
-use crate::TargetUnit;
 
 
 pub struct MainUnit {
@@ -46,7 +45,9 @@ impl MainUnit {
         }
     }
 
-    pub fn update(&mut self, dt: f32, mouse_position: Vec2, target_pos: (f32, f32), target_rad: f32) {
+    // Возвращает сигнал о попадании в цель
+    pub fn update(&mut self, dt: f32, mouse_position: Vec2, target_pos: (f32, f32), target_rad: f32
+    ) -> (bool, f32) {
         self.shoot_timer += dt;
         // print!("self.shoot_timer {}\ndt {}\n", self.shoot_timer, dt);
         let mut x_move = 0f32;
@@ -119,6 +120,16 @@ impl MainUnit {
             audio::play_sound(self.shoot_sound, sound_params);
         }
 
+        // удаление снарядов на отлете
+        self.projectiles.retain(
+            |p|
+                ((p.start_position.0 - p.position.0).powf(2f32)
+                    + (p.start_position.1 - p.position.1).powf(2f32)
+                    < self.shoot_range.powf(2f32)) && p.alive);
+
+        let mut target_impact= false;
+        let mut impact_angle = 0.;
+
         for i in 0..self.projectiles.len() {
             if (self.projectiles[i].position.0 - target_pos.0).powf(2f32) +
                 (self.projectiles[i].position.1 - target_pos.1).powf(2f32)
@@ -126,6 +137,8 @@ impl MainUnit {
                 let mut sound_params: PlaySoundParams = PlaySoundParams::default();
                 sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 1.2;
                 audio::play_sound(self.target_impact_sound, sound_params);
+                target_impact = true;
+                impact_angle = self.projectiles[i].rotation;
                 self.projectiles[i].alive = false;
             } else {
                 self.projectiles[i].position.0 +=
@@ -136,13 +149,8 @@ impl MainUnit {
                         (self.projectiles[i].rotation - f32::to_radians(90.)).sin();
             }
         }
+        (target_impact, impact_angle)
 
-        // удаление снарядов на отлете
-        self.projectiles.retain(
-            |p|
-                ((p.start_position.0 - p.position.0).powf(2f32)
-                    + (p.start_position.1 - p.position.1).powf(2f32)
-                    < self.shoot_range.powf(2f32)) && p.alive);
     }
 
     pub fn draw(&self) {

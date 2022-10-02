@@ -34,12 +34,17 @@ impl Scene {
     }
 
     pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
-        self.main_unit.update(
+        self.target_unit.shift = (0., 0.);
+        let (target_impact, impact_angle) = self.main_unit.update(
             dt,
             mouse_position,
             self.target_unit.position,
             self.target_unit.texture.width() / 2.
         );
+        if target_impact {
+            let shift = 5.;
+            self.target_unit.shift = (shift * impact_angle.sin(), shift * impact_angle.cos());
+        }
     }
 
     pub fn draw(&self) {
