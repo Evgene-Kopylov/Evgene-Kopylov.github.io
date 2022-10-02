@@ -45,7 +45,7 @@ impl MainUnit {
         }
     }
 
-    pub fn update(&mut self, dt: f32, mouse_position: Vec2, target: (f32, f32)) {
+    pub fn update(&mut self, dt: f32, mouse_position: Vec2, target_pos: (f32, f32), target_rad: f32) {
         self.shoot_timer += dt;
         // print!("self.shoot_timer {}\ndt {}\n", self.shoot_timer, dt);
         let mut x_move = 0f32;
@@ -119,9 +119,9 @@ impl MainUnit {
         }
 
         for i in 0..self.projectiles.len() {
-            if (self.projectiles[i].position.0 - target.0).powf(2f32) +
-                (self.projectiles[i].position.1 - target.1).powf(2f32)
-                < (self.radius * 0.6).powf(2f32) {
+            if (self.projectiles[i].position.0 - target_pos.0).powf(2f32) +
+                (self.projectiles[i].position.1 - target_pos.1).powf(2f32)
+                < (target_rad + 10.).powf(2f32) {
                 self.projectiles[i].alive = false;
             } else {
                 self.projectiles[i].position.0 +=

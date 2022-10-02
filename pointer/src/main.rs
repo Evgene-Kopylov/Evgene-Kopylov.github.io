@@ -26,10 +26,13 @@ async fn main() {
     let target_unit_texture = load_texture(TARGET_UNIT_TEXTURE_PATH).await.unwrap();
     let target_unit_position = (screen_width() * 0.5, 160.);
     let mut target_unit = TargetUnit::new(target_unit_texture, target_unit_position);
+    let target_unit_radius = target_unit.texture.width() / 2.;
+
 
     loop {
         let mouse_position: Vec2 = mouse_position().into();
-        main_unit.update(get_frame_time(), mouse_position, target_unit.position);
+        main_unit.update(get_frame_time(), mouse_position, target_unit.position,
+                         target_unit_radius);
         clear_background(GROUND_COLOR);
         target_unit.draw();
         main_unit.draw();

@@ -3,7 +3,7 @@ use macroquad::prelude::{draw_texture_ex, DrawTextureParams, Texture2D, Vec2};
 
 
 pub struct TargetUnit {
-    texture: Texture2D,
+    pub texture: Texture2D,
     spawn_position: (f32, f32),
     pub position: (f32, f32),
 }
