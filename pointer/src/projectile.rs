@@ -4,6 +4,7 @@ use crate::settings::*;
 pub struct Projectile {
     pub texture: Texture2D,
     pub rotation: f32,
+    pub start_position: (f32, f32),
     pub position: (f32, f32),
     pub size: (f32, f32),
     pub speed: f32,
@@ -21,6 +22,7 @@ impl Projectile {
         Projectile {
             texture,
             rotation,
+            start_position: position,
             position,
             size,
             speed,

@@ -18,6 +18,7 @@ pub struct MainUnit {
     pub projectiles: Vec<Projectile>,
     shoot_timer: f32,
     shoot_delay: f32,
+    shoot_range: f32,
 }
 
 
@@ -35,10 +36,11 @@ impl MainUnit {
             radius: f32::max(texture.width(), texture.height()),
             rotation: 0.,
             position,
-            speed: 300.,
+            speed: MAIN_UNIT_SPEED,
             projectiles: Vec::new(),
             shoot_timer: 0.,
             shoot_delay: MAIN_UNIT_SHOOT_DELAY,
+            shoot_range: MAIN_UNIT_SHOOT_RANGE
         }
     }
 
@@ -114,6 +116,14 @@ impl MainUnit {
             sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME;
             audio::play_sound(self.shoot_sound, sound_params);
         }
+
+        // удаление снарядов на отлете
+        self.projectiles.retain(
+            |p|
+            (p.start_position.0 - p.position.0).powf(2f32)
+                + (p.start_position.1 - p.position.1).powf(2f32)
+                < self.shoot_range.powf(2f32)
+        );
 
         for i in 0..self.projectiles.len() {
             self.projectiles[i].position.0 +=
