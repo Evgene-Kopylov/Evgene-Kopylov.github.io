@@ -3,6 +3,7 @@ use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
 use crate::projectile::*;
 use crate::settings::*;
+use crate::TargetUnit;
 
 
 pub struct MainUnit {
@@ -44,7 +45,7 @@ impl MainUnit {
         }
     }
 
-    pub fn update(&mut self, dt: f32, mouse_position: Vec2) {
+    pub fn update(&mut self, dt: f32, mouse_position: Vec2, target: (f32, f32)) {
         self.shoot_timer += dt;
         // print!("self.shoot_timer {}\ndt {}\n", self.shoot_timer, dt);
         let mut x_move = 0f32;
@@ -117,24 +118,27 @@ impl MainUnit {
             audio::play_sound(self.shoot_sound, sound_params);
         }
 
+        for i in 0..self.projectiles.len() {
+            if (self.projectiles[i].position.0 - target.0).powf(2f32) +
+                (self.projectiles[i].position.1 - target.1).powf(2f32)
+                < (self.radius * 0.6).powf(2f32) {
+                self.projectiles[i].alive = false;
+            } else {
+                self.projectiles[i].position.0 +=
+                    dt * self.projectiles[i].speed *
+                        (self.projectiles[i].rotation - f32::to_radians(90.)).cos();
+                self.projectiles[i].position.1 +=
+                    dt * self.projectiles[i].speed *
+                        (self.projectiles[i].rotation - f32::to_radians(90.)).sin();
+            }
+        }
+
         // удаление снарядов на отлете
         self.projectiles.retain(
             |p|
-            (p.start_position.0 - p.position.0).powf(2f32)
-                + (p.start_position.1 - p.position.1).powf(2f32)
-                < self.shoot_range.powf(2f32)
-        );
-
-        for i in 0..self.projectiles.len() {
-            self.projectiles[i].position.0 +=
-                dt * self.projectiles[i].speed *
-                    (self.projectiles[i].rotation - f32::to_radians(90.)).cos();
-            self.projectiles[i].position.1 +=
-                dt * self.projectiles[i].speed *
-                    (self.projectiles[i].rotation - f32::to_radians(90.)).sin();
-        }
-
-
+                ((p.start_position.0 - p.position.0).powf(2f32)
+                    + (p.start_position.1 - p.position.1).powf(2f32)
+                    < self.shoot_range.powf(2f32)) && p.alive);
     }
 
     pub fn draw(&self) {

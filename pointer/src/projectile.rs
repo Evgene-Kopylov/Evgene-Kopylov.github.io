@@ -8,6 +8,8 @@ pub struct Projectile {
     pub position: (f32, f32),
     pub size: (f32, f32),
     pub speed: f32,
+    pub alive: bool,
+
 }
 
 
@@ -26,6 +28,7 @@ impl Projectile {
             position,
             size,
             speed,
+            alive: true,
         }
     }
 

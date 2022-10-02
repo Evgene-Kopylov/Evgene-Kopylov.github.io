@@ -7,7 +7,10 @@ use settings::*;
 mod projectile;
 
 mod main_unit;
+mod target_unit;
+
 use main_unit::*;
+use crate::target_unit::TargetUnit;
 
 
 #[macroquad::main("breakout")]
@@ -20,10 +23,15 @@ async fn main() {
     let mut main_unit = MainUnit::new(
         main_unit_texture, projectile_texture, shoot_sound, spawn_position);
 
+    let target_unit_texture = load_texture(TARGET_UNIT_TEXTURE_PATH).await.unwrap();
+    let target_unit_position = (screen_width() * 0.5, 160.);
+    let mut target_unit = TargetUnit::new(target_unit_texture, target_unit_position);
+
     loop {
         let mouse_position: Vec2 = mouse_position().into();
-        main_unit.update(get_frame_time(), mouse_position);
+        main_unit.update(get_frame_time(), mouse_position, target_unit.position);
         clear_background(GROUND_COLOR);
+        target_unit.draw();
         main_unit.draw();
         next_frame().await
     }
