@@ -9,6 +9,7 @@ use crate::TargetUnit;
 pub struct MainUnit {
     pub texture: Texture2D,
     pub shoot_sound: Sound,
+    target_impact_sound: Sound,
     pub size: (f32, f32),
     pub scale: f32,
     pub radius: f32,
@@ -28,15 +29,15 @@ impl MainUnit {
         texture: Texture2D,
         projectile_texture: Texture2D,
         shoot_sound: Sound,
-        position: (f32, f32)
+        target_impact_sound: Sound,
+        position: (f32, f32),
     ) -> Self {
         Self {
-            texture, projectile_texture, shoot_sound,
+            texture, projectile_texture, shoot_sound, target_impact_sound, position,
             size: (texture.width(), texture.height()),
             scale: 1.,
             radius: f32::max(texture.width(), texture.height()),
             rotation: 0.,
-            position,
             speed: MAIN_UNIT_SPEED,
             projectiles: Vec::new(),
             shoot_timer: 0.,
@@ -122,6 +123,9 @@ impl MainUnit {
             if (self.projectiles[i].position.0 - target_pos.0).powf(2f32) +
                 (self.projectiles[i].position.1 - target_pos.1).powf(2f32)
                 < (target_rad + 10.).powf(2f32) {
+                let mut sound_params: PlaySoundParams = PlaySoundParams::default();
+                sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 1.2;
+                audio::play_sound(self.target_impact_sound, sound_params);
                 self.projectiles[i].alive = false;
             } else {
                 self.projectiles[i].position.0 +=
