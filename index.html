@@ -166,5 +166,12 @@
     </a>
 </div>
 
+<script>
+    let block_id = window.location.href.split('#')[1];
+    let meta_img = document.createElement("meta")
+    meta_img.property = "og:image"
+    meta_img.content = document.getElementById(block_id).getElementsByTagName("img")[0]
+</script>
+
 </body>
 </html>
