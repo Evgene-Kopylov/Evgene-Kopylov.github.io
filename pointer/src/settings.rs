@@ -12,5 +12,6 @@ pub const MAIN_UNIT_SHOOT_SOUND_VOLUME: f32 = 0.16;
 // pub const MAIN_UNIT_SHOOT_SOUND_ASSET: &str = "../assets/sound/XAL_Weapon.wav";
 pub const MAIN_UNIT_SHOOT_SOUND_ASSET: &str = "../assets/sound/4 XSA_Weapon.wav";
 pub const MAIN_UNIT_TEXTURE_PATH: &str = "../assets/pointer/pointer_3.png";
-pub const TARGET_UNIT_TEXTURE_PATH: &str = "../assets/pointer/target_unit_1.png";
+pub const TARGET_UNIT_TEXTURE_PATH: &str = "../assets/pointer/target_unit_3.png";
+pub const TARGET_UNIT_SHADOW_TEXTURE_PATH: &str = "../assets/pointer/target_unit_3_shadow.png";
 pub const TARGET_UNIT_IMPACT_SOUND: &str = "../assets/sound/4 Interface.wav";

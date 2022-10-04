@@ -16,6 +16,7 @@ impl Scene {
         spawn_position: (f32, f32),
 
         target_unit_texture: Texture2D,
+        target_unit_shadow_texture: Texture2D,
         target_unit_position: (f32, f32),
     ) -> Self {
         Self {
@@ -28,6 +29,7 @@ impl Scene {
             ),
             target_unit: TargetUnit::new(
                 target_unit_texture,
+                target_unit_shadow_texture,
                 target_unit_position
             )
         }
@@ -48,8 +50,8 @@ impl Scene {
     }
 
     pub fn draw(&self) {
-        self.main_unit.draw();
         self.target_unit.draw();
+        self.main_unit.draw();
     }
 
 }

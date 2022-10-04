@@ -23,6 +23,7 @@ async fn main() {
     let target_impact_sound: Sound = load_sound(TARGET_UNIT_IMPACT_SOUND).await.unwrap();
     let spawn_position = (screen_width() * 0.5, screen_height() - 130.);
     let target_unit_texture = load_texture(TARGET_UNIT_TEXTURE_PATH).await.unwrap();
+    let target_unit_shadow_texture = load_texture(TARGET_UNIT_SHADOW_TEXTURE_PATH).await.unwrap();
     let target_unit_position = (screen_width() * 0.5, 160.);
 
     let mut scene: Scene = Scene::new(
@@ -34,6 +35,7 @@ async fn main() {
         spawn_position,
         //target_unit
         target_unit_texture,
+        target_unit_shadow_texture,
         target_unit_position,
     );
 
