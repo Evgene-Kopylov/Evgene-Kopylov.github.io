@@ -21,7 +21,7 @@ async fn main() {
     let projectile_texture = load_texture(PROJECTILE_TEXTURE_PATH).await.unwrap();
     let shoot_sound: Sound = load_sound(MAIN_UNIT_SHOOT_SOUND_ASSET).await.unwrap();
     let target_impact_sound: Sound = load_sound(TARGET_UNIT_IMPACT_SOUND).await.unwrap();
-    let spawn_position = (screen_width() * 0.5, screen_height() - 130.);
+    let spawn_position = (screen_width() * 0.5, screen_height() * 0.8);
     let target_unit_texture = load_texture(TARGET_UNIT_TEXTURE_PATH).await.unwrap();
     let target_unit_shadow_texture = load_texture(TARGET_UNIT_SHADOW_TEXTURE_PATH).await.unwrap();
     let target_unit_position = (screen_width() * 0.5, 160.);
