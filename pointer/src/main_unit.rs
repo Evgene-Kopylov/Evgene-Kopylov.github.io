@@ -135,7 +135,7 @@ impl MainUnit {
                 (self.projectiles[i].position.1 - target_pos.1).powf(2f32)
                 < target_rad.powf(2f32) {
                 let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-                sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 1.2;
+                sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 0.35;
                 audio::play_sound(self.target_impact_sound, sound_params);
                 target_impact = true;
                 impact_angle = self.projectiles[i].rotation;
