@@ -133,7 +133,7 @@ impl MainUnit {
         for i in 0..self.projectiles.len() {
             if (self.projectiles[i].position.0 - target_pos.0).powf(2f32) +
                 (self.projectiles[i].position.1 - target_pos.1).powf(2f32)
-                < (target_rad + 10.).powf(2f32) {
+                < target_rad.powf(2f32) {
                 let mut sound_params: PlaySoundParams = PlaySoundParams::default();
                 sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME * 1.2;
                 audio::play_sound(self.target_impact_sound, sound_params);

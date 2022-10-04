@@ -50,8 +50,9 @@ impl Scene {
     }
 
     pub fn draw(&self) {
-        self.target_unit.draw();
+        self.target_unit.draw_shadow();
         self.main_unit.draw();
+        self.target_unit.draw();
     }
 
 }
