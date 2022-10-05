@@ -3,7 +3,7 @@ use macroquad::prelude::*;
 
 const GROUND_COLOR: Color = Color::new(0.8, 0.8, 0.8, 1.00);
 const UNIT_COLOR: Color = DARKGRAY;
-const UNIT_SIZE: Vec2 = const_vec2!([40., 40.]);
+const UNIT_SIZE: Vec2 = Vec2::new(40., 40.);
 const UNIT_SPEED: f32 = 300.0;
 
 struct Unit {
@@ -22,21 +22,26 @@ impl Unit {
         }
     }
 
-    pub fn update(&mut self, dt: f32) {
+    pub fn update(&mut self, dt: f32) -> &str {
+        let mut keycode: &str = "";
         let mut x_move = 0f32;
         if is_key_down(KeyCode::Left) {
             x_move -= 1f32;
+            keycode = "Left"
         }
         if is_key_down(KeyCode::Right) {
             x_move += 1f32;
+            keycode = "Right"
         }
 
         let mut y_move = 0f32;
         if is_key_down(KeyCode::Up) {
             y_move -= 1f32;
+            keycode = "Up"
         }
         if is_key_down(KeyCode::Down) {
             y_move += 1f32;
+            keycode = "Down"
         }
 
         if self.rect.x < 1f32 {
@@ -55,6 +60,7 @@ impl Unit {
 
         self.rect.x += x_move * dt * UNIT_SPEED;
         self.rect.y += y_move * dt * UNIT_SPEED;
+        keycode
     }
 
     pub fn draw(&self) {
@@ -74,7 +80,8 @@ async fn main() {
     let mut unit = Unit::new();
 
     loop {
-        unit.update(get_frame_time());
+        let keycode = unit.update(get_frame_time());
+        if keycode != "" { info!("{}", keycode); }
         clear_background(GROUND_COLOR);
         unit.draw();
         next_frame().await
